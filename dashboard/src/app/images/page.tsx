@@ -2,8 +2,6 @@ import { prisma } from "@/lib/db";
 import { AssetCard } from "@/components/shared/AssetCard";
 import { Card } from "@/components/ui/card";
 
-export const dynamic = "force-dynamic";
-
 export default async function ImagesPage() {
   const assets = await prisma.asset.findMany({
     where: { type: "image" },

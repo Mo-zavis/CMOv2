@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Card } from "@/components/ui/card";
+import { fetchAPI } from "@/lib/api";
 import {
   PLATFORMS,
   PRIMARY_PLATFORMS,
@@ -33,7 +34,7 @@ export default function SocialPage() {
 
   const fetchIntegrations = useCallback(async () => {
     try {
-      const res = await fetch("/api/social/integrations");
+      const res = await fetchAPI("/api/social/integrations");
       const json: ApiResponse = await res.json();
       setData(json);
     } catch {

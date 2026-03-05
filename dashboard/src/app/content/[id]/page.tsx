@@ -8,6 +8,7 @@ import { FeedbackPanel } from "@/components/shared/FeedbackPanel";
 import { ApprovalBar } from "@/components/shared/ApprovalBar";
 import { BrandCheckReport } from "@/components/shared/BrandCheckReport";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { fetchAPI } from "@/lib/api";
 import type { AssetStatus } from "@/lib/status-machine";
 
 interface AssetData {
@@ -53,7 +54,7 @@ export default function ContentDetailPage() {
   const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
 
   const fetchAsset = useCallback(async () => {
-    const res = await fetch(`/api/assets/${id}`);
+    const res = await fetchAPI(`/api/assets/${id}`);
     if (res.ok) {
       const data = await res.json();
       setAsset(data);

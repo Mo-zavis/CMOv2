@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import Link from "next/link";
+import { fetchAPI } from "@/lib/api";
 
 // --- Types ---
 
@@ -225,7 +226,7 @@ export default function CampaignDetailPage() {
   const [showTargeting, setShowTargeting] = useState(false);
 
   const fetchCampaign = useCallback(async () => {
-    const res = await fetch(`/api/campaigns/${id}`);
+    const res = await fetchAPI(`/api/campaigns/${id}`);
     if (res.ok) {
       setCampaign(await res.json());
     }

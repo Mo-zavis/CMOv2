@@ -11,6 +11,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { getEventTypeMeta } from "@/lib/calendar-events";
+import { fetchAPI } from "@/lib/api";
 import { CalendarDayCell } from "./CalendarDayCell";
 import type { NormalizedEvent } from "./CalendarEventBar";
 import Link from "next/link";
@@ -128,7 +129,7 @@ export function CalendarGrid() {
       currentMonth.month + 1
     ).padStart(2, "0")}`;
     try {
-      const res = await fetch(`/api/calendar/events?month=${monthStr}`);
+      const res = await fetchAPI(`/api/calendar/events?month=${monthStr}`);
       const data = await res.json();
       setEvents(data.events ?? []);
     } catch {

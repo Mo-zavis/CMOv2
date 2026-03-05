@@ -3,8 +3,6 @@ import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-
 async function getStats() {
   const [totalAssets, byStatus, byType, recentAssets] = await Promise.all([
     prisma.asset.count(),

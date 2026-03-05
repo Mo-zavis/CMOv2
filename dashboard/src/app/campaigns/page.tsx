@@ -3,8 +3,6 @@ import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-
 interface TargetingData {
   locations?: string[];
   age_range?: [string, string];

@@ -13,6 +13,7 @@ import type { VideoSceneData } from "@/components/video/StoryboardTable";
 import { TimelineBar } from "@/components/video/TimelineBar";
 import { VideoPlayer } from "@/components/video/VideoPlayer";
 import { VideoMetadataCard } from "@/components/video/VideoMetadataCard";
+import { fetchAPI } from "@/lib/api";
 import type { AssetStatus } from "@/lib/status-machine";
 
 interface AssetData {
@@ -76,7 +77,7 @@ export default function VideoDetailPage() {
   const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
 
   const fetchAsset = useCallback(async () => {
-    const res = await fetch(`/api/assets/${id}`);
+    const res = await fetchAPI(`/api/assets/${id}`);
     if (res.ok) {
       const data = await res.json();
       setAsset(data);
