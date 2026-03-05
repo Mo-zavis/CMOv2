@@ -113,17 +113,35 @@ const ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-export function Sidebar() {
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 h-screen bg-white border-r border-border flex flex-col fixed left-0 top-0">
+    <aside
+      className={`w-56 h-screen bg-white border-r border-border flex flex-col fixed left-0 top-0 z-50 transition-transform duration-200 ${
+        open ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0`}
+    >
       {/* Logo */}
-      <div className="h-14 flex items-center px-4 border-b border-border">
+      <div className="h-14 flex items-center justify-between px-4 border-b border-border">
         <span className="font-heading text-lg font-semibold tracking-tight">
           <span className="text-[#006828]">Zavis</span>{" "}
           <span className="text-muted-foreground font-normal text-sm">CMO</span>
         </span>
+        <button
+          onClick={onClose}
+          className="lg:hidden p-1 rounded hover:bg-muted text-muted-foreground"
+          aria-label="Close menu"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
 
       {/* Nav */}
@@ -143,6 +161,7 @@ export function Sidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={onClose}
                   className={`flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors ${
                     isActive
                       ? "bg-[#006828]/10 text-[#006828] font-medium"

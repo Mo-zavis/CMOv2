@@ -28,7 +28,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Stats row */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="p-4">
           <p className="text-xs text-muted-foreground uppercase tracking-wide">
             Total Assets
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Asset type breakdown */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { type: "image", label: "Images", href: "/images" },
           { type: "copy", label: "Content", href: "/content" },
@@ -97,15 +97,15 @@ export default async function DashboardPage() {
         ) : (
           <div className="space-y-2">
             {recentAssets.map((asset) => (
-              <Card key={asset.id} className="p-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-muted-foreground uppercase w-14">
+              <Card key={asset.id} className="p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="text-xs text-muted-foreground uppercase w-14 shrink-0">
                     {asset.type}
                   </span>
-                  <span className="text-sm font-medium">{asset.title}</span>
+                  <span className="text-sm font-medium truncate">{asset.title}</span>
                   <StatusBadge status={asset.status} />
                 </div>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <div className="flex items-center gap-3 text-xs text-muted-foreground sm:shrink-0 pl-[68px] sm:pl-0">
                   <span>v{asset.currentVersion}</span>
                   <span>
                     {new Date(asset.updatedAt).toLocaleDateString("en-US", {

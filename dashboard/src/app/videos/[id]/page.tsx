@@ -125,7 +125,7 @@ export default function VideoDetailPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h2 className="font-heading font-semibold text-lg">{asset.title}</h2>
           {asset.description && (
@@ -134,7 +134,7 @@ export default function VideoDetailPage() {
             </p>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {modelName && (
             <span className="text-xs bg-violet-50 text-violet-700 border border-violet-200 px-2 py-1 rounded font-mono">
               {modelName}
@@ -159,9 +159,9 @@ export default function VideoDetailPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main content - 2 cols */}
-        <div className="col-span-2 space-y-5">
+        <div className="lg:col-span-2 space-y-5">
           {/* Storyboard table — THE PRIMARY VIEW */}
           <StoryboardTable scenes={scenes} />
 

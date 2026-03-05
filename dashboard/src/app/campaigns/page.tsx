@@ -78,8 +78,8 @@ export default async function CampaignsPage() {
               <Link key={campaign.id} href={`/campaigns/${campaign.id}`}>
                 <Card className="p-5 hover:shadow-md transition-shadow cursor-pointer">
                   {/* Row 1: Title + status + pillar */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3 mb-3">
+                    <div className="flex items-center gap-3 flex-wrap">
                       <h3 className="font-heading font-semibold text-sm">
                         {campaign.name}
                       </h3>
@@ -148,8 +148,8 @@ export default async function CampaignsPage() {
                   )}
 
                   {/* Row 3: Channels + metrics */}
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <div className="flex items-center gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-3 flex-wrap">
                       {channels && channels.length > 0 && (
                         <span>
                           Channels: {channels.join(", ")}
@@ -165,7 +165,7 @@ export default async function CampaignsPage() {
                         <span>{campaign.adGroups.length} ad groups</span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-wrap">
                       {kpis?.target_cpa && (
                         <span>Target CPA: ${kpis.target_cpa}</span>
                       )}

@@ -796,7 +796,7 @@ export default function EcosystemPage() {
       </div>
 
       {/* Stats bar */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-[#006828]/10 flex items-center justify-center">
             <span className="text-sm font-bold text-[#006828]">

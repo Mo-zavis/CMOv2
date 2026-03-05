@@ -99,7 +99,7 @@ export default function SocialPage() {
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
                 Connected Accounts ({data.integrations.length})
               </p>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data.integrations.map((integration) => {
                   const meta = getPlatformMeta(integration.identifier);
                   return (
@@ -167,7 +167,7 @@ export default function SocialPage() {
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
                 Not Connected
               </p>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {unconnectedPrimary.map((platform) => (
                   <Card
                     key={platform.id}
@@ -207,7 +207,7 @@ export default function SocialPage() {
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
                 Other Platforms
               </p>
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {unconnectedSecondary.map((platform) => (
                   <Card
                     key={platform.id}

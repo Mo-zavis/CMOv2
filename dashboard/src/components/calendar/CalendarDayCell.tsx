@@ -26,7 +26,7 @@ export function CalendarDayCell({
   return (
     <div
       className={cn(
-        "border-r border-b border-border min-h-[120px] p-1.5 transition-colors",
+        "border-r border-b border-border min-h-[80px] sm:min-h-[120px] p-1 sm:p-1.5 transition-colors",
         isCurrentMonth ? "bg-white" : "bg-gray-50/50",
         !isCurrentMonth && "opacity-40"
       )}

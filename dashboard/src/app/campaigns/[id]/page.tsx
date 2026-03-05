@@ -266,7 +266,7 @@ export default function CampaignDetailPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h2 className="font-heading font-semibold text-lg">
             {campaign.name}
@@ -288,7 +288,7 @@ export default function CampaignDetailPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="p-4">
           <p className="text-xs text-muted-foreground uppercase tracking-wide">
             Budget
@@ -455,8 +455,8 @@ export default function CampaignDetailPage() {
       )}
 
       {/* Main layout: Ad Groups (left 2/3) + KPIs (right 1/3) */}
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-4">
           <h3 className="font-heading font-medium text-sm">
             Ad Groups ({campaign.adGroups.length})
           </h3>
@@ -472,8 +472,8 @@ export default function CampaignDetailPage() {
             return (
               <Card key={group.id} className="p-0 overflow-hidden">
                 {/* Row 1: Identity bar */}
-                <div className="px-4 py-3 bg-muted/30 border-b border-border flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                <div className="px-4 py-3 bg-muted/30 border-b border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <h4 className="text-sm font-semibold">{group.name}</h4>
                     <span className="text-[10px] bg-foreground/10 text-foreground px-1.5 py-0.5 rounded uppercase font-medium">
                       {group.platform.replace(/_/g, " ")}
@@ -615,8 +615,8 @@ export default function CampaignDetailPage() {
                               className="border border-border rounded-md p-3 space-y-2"
                             >
                               {/* Creative header */}
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
+                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <div className="flex items-center gap-2 flex-wrap">
                                   <span className="text-sm font-medium">
                                     {creative.headline}
                                   </span>
@@ -642,7 +642,7 @@ export default function CampaignDetailPage() {
                               )}
 
                               {/* Linked assets */}
-                              <div className="flex gap-3">
+                              <div className="flex flex-col sm:flex-row gap-3">
                                 {creative.linkedImage && (
                                   <Link
                                     href={`/images/${creative.linkedImage.id}`}
@@ -756,21 +756,21 @@ export default function CampaignDetailPage() {
                   );
                   return (
                     <Link key={asset.id} href={`${route}/${asset.id}`}>
-                      <Card className="p-3 flex items-center justify-between hover:shadow-sm transition-shadow cursor-pointer">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[10px] uppercase text-muted-foreground w-10">
+                      <Card className="p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3 hover:shadow-sm transition-shadow cursor-pointer">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="text-[10px] uppercase text-muted-foreground w-10 shrink-0">
                             {asset.type}
                           </span>
-                          <span className="text-sm font-medium">
+                          <span className="text-sm font-medium truncate">
                             {asset.title}
                           </span>
                           {model && (
-                            <span className="text-[10px] bg-violet-50 text-violet-700 border border-violet-200 px-1.5 py-0.5 rounded font-mono">
+                            <span className="text-[10px] bg-violet-50 text-violet-700 border border-violet-200 px-1.5 py-0.5 rounded font-mono shrink-0">
                               {model}
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 shrink-0">
                           {asset.platform && (
                             <span className="text-[10px] text-muted-foreground capitalize">
                               {asset.platform}

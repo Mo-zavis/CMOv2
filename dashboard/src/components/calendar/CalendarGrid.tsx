@@ -207,8 +207,8 @@ export function CalendarGrid() {
       </div>
 
       {/* Calendar grid */}
-      <div className="border border-border rounded-lg overflow-hidden">
-        <div className="grid grid-cols-7">
+      <div className="border border-border rounded-lg overflow-x-auto">
+        <div className="grid grid-cols-7 min-w-[640px]">
           {/* Day-of-week headers */}
           {DAY_LABELS.map((d) => (
             <div

@@ -75,10 +75,10 @@ export default function EmailDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h2 className="font-heading font-semibold text-lg">{asset.title}</h2>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
             {asset.subtype && (
               <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded capitalize">
                 {asset.subtype.replace(/_/g, " ")}
@@ -89,8 +89,8 @@ export default function EmailDetailPage() {
         <StatusBadge status={asset.status} />
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-4">
           {/* Email metadata */}
           {meta && (
             <Card className="p-4">
