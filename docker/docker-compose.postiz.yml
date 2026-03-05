@@ -1,0 +1,61 @@
+services:
+  postiz:
+    image: ghcr.io/gitroomhq/postiz-app:latest
+    container_name: postiz
+    restart: unless-stopped
+    env_file:
+      - postiz.env
+    ports:
+      - "4007:5000"
+    volumes:
+      - postiz-config:/config
+      - postiz-uploads:/uploads
+    depends_on:
+      postiz-postgres:
+        condition: service_healthy
+      postiz-redis:
+        condition: service_healthy
+    networks:
+      - postiz-network
+
+  postiz-postgres:
+    image: postgres:17-alpine
+    container_name: postiz-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postiz
+      POSTGRES_PASSWORD: postiz_password
+      POSTGRES_DB: postiz-db
+    volumes:
+      - postiz-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postiz -d postiz-db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - postiz-network
+
+  postiz-redis:
+    image: redis:7.2-alpine
+    container_name: postiz-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postiz-redis-data:/data
+    networks:
+      - postiz-network
+
+volumes:
+  postiz-pg-data:
+  postiz-redis-data:
+  postiz-config:
+  postiz-uploads:
+
+networks:
+  postiz-network:
+    driver: bridge

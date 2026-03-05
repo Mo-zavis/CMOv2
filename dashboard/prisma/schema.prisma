@@ -1,0 +1,218 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// === CORE MODELS ===
+
+model Project {
+  id             String          @id @default(cuid())
+  name           String
+  config         String?         // JSON string for brand settings
+  assets         Asset[]
+  campaigns      Campaign[]
+  calendarEvents CalendarEvent[]
+  createdAt      DateTime        @default(now())
+}
+
+model Asset {
+  id             String           @id @default(cuid())
+  projectId      String
+  project        Project          @relation(fields: [projectId], references: [id])
+  campaignId     String?
+  campaign       Campaign?        @relation(fields: [campaignId], references: [id])
+  type           String           // "image" | "copy" | "ad_creative" | "video" | "social_post" | "email"
+  subtype        String?          // "blog_post" | "ad_copy" | "social_image" | "hero_banner" etc.
+  platform       String?          // "linkedin" | "instagram" | "google_ads" | "meta_ads" etc.
+  title          String
+  description    String?
+  status         String           @default("DRAFT")
+  currentVersion Int              @default(1)
+  metadata       String?          // JSON string
+  tags           String?          // comma-separated
+  versions       AssetVersion[]
+  feedbacks      Feedback[]
+  approvals      ApprovalAction[]
+  brandChecks    BrandCheck[]
+  scenes         VideoScene[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([projectId])
+  @@index([campaignId])
+  @@index([type])
+  @@index([status])
+}
+
+model AssetVersion {
+  id        String     @id @default(cuid())
+  assetId   String
+  asset     Asset      @relation(fields: [assetId], references: [id])
+  version   Int
+  filePath  String?    // path relative to /assets/
+  content   String?    // for text-based assets (markdown, captions)
+  metadata  String?    // JSON: generation params, model, prompt, etc.
+  changelog String?    // what changed from previous version
+  feedbacks Feedback[]
+  createdAt DateTime   @default(now())
+
+  @@unique([assetId, version])
+  @@index([assetId])
+}
+
+model Feedback {
+  id              String        @id @default(cuid())
+  assetId         String
+  asset           Asset         @relation(fields: [assetId], references: [id])
+  versionId       String?
+  version         AssetVersion? @relation(fields: [versionId], references: [id])
+  author          String        @default("human")
+  type            String        // "approval" | "revision" | "comment" | "qa_result"
+  comment         String
+  actionTaken     String?       // what the agent did in response
+  resultVersionId String?       // version ID created as result of this feedback
+  createdAt       DateTime      @default(now())
+
+  @@index([assetId])
+}
+
+model ApprovalAction {
+  id         String   @id @default(cuid())
+  assetId    String
+  asset      Asset    @relation(fields: [assetId], references: [id])
+  fromStatus String
+  toStatus   String
+  actor      String   @default("human")
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  @@index([assetId])
+}
+
+model BrandCheck {
+  id            String   @id @default(cuid())
+  assetId       String
+  asset         Asset    @relation(fields: [assetId], references: [id])
+  versionNumber Int
+  checkType     String   // "visual_qa" | "copy_compliance" | "brand_voice"
+  score         Float?
+  passed        Boolean
+  details       String   // JSON: full QA report
+  createdAt     DateTime @default(now())
+
+  @@index([assetId])
+}
+
+model Campaign {
+  id        String    @id @default(cuid())
+  projectId String
+  project   Project   @relation(fields: [projectId], references: [id])
+  name      String
+  objective String?
+  status    String    @default("PLANNING")
+  startDate DateTime?
+  endDate   DateTime?
+  budget    Float?
+  pillar    String?   // "increase_revenue" | "reduce_no_shows" | "patient_satisfaction"
+  metadata  String?   // JSON
+  targeting String?   // JSON: demographics, age groups, job titles, industries, locations, audiences
+  channels  String?   // JSON: array of channel configs (google_ads, meta_ads, linkedin, etc.)
+  kpis      String?   // JSON: target metrics (demo_bookings, cac, roas, etc.)
+  assets    Asset[]
+  adGroups  AdGroup[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([projectId])
+}
+
+model AdGroup {
+  id           String       @id @default(cuid())
+  campaignId   String
+  campaign     Campaign     @relation(fields: [campaignId], references: [id])
+  name         String
+  platform     String       // "google_ads" | "meta_ads" | "linkedin_ads"
+  adType       String       // "search" | "display" | "video" | "feed" | "stories" | "reels"
+  targeting    String?      // JSON: group-specific targeting overrides
+  keywords     String?      // JSON: for Google Search (array of {keyword, matchType, bid})
+  budget       Float?
+  bidStrategy  String?      // "maximize_conversions" | "target_cpa" | "target_roas"
+  status       String       @default("DRAFT")
+  creatives    AdCreative[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([campaignId])
+}
+
+model AdCreative {
+  id           String   @id @default(cuid())
+  adGroupId    String
+  adGroup      AdGroup  @relation(fields: [adGroupId], references: [id])
+  imageAssetId String?  // reference to image Asset
+  copyAssetId  String?  // reference to copy Asset
+  headline     String
+  description  String?
+  cta          String?  // "Book a Demo" | "Learn More" | "Get Started"
+  landingUrl   String?
+  format       String   // "single_image" | "carousel" | "responsive_search" | "video"
+  utmParams    String?  // JSON: utm_source, utm_medium, utm_campaign, utm_content
+  metadata     String?  // JSON: platform-specific settings
+  status       String   @default("DRAFT")
+  createdAt    DateTime @default(now())
+
+  @@index([adGroupId])
+}
+
+model CalendarEvent {
+  id          String    @id @default(cuid())
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id])
+  title       String
+  description String?
+  date        DateTime
+  endDate     DateTime?              // null = single-day; set = multi-day span
+  eventType   String                 // campaign_launch | ad_start | social_post | content_publish | email_send | milestone
+  platform    String?                // google_ads | meta_ads | linkedin | instagram | blog | null
+  status      String    @default("PLANNED")
+  assetId     String?
+  campaignId  String?
+  metadata    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([projectId])
+  @@index([date])
+  @@index([eventType])
+}
+
+model VideoScene {
+  id              String   @id @default(cuid())
+  assetId         String
+  asset           Asset    @relation(fields: [assetId], references: [id])
+  sceneNumber     Int
+  title           String?
+  description     String
+  compositionType String   // "veo_only" | "veo_plus_remotion" | "remotion_only" | "still_image"
+  startFramePath  String?
+  endFramePath    String?
+  clipPath        String?
+  startTime       Float    @default(0)
+  duration        Float    @default(5)
+  voiceoverText   String?
+  voiceoverPath   String?
+  textOverlay     String?
+  remotionConfig  String?  // JSON
+  status          String   @default("PENDING")
+  metadata        String?  // JSON
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([assetId, sceneNumber])
+  @@index([assetId])
+}

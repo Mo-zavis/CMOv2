@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Next.js build output
+.next/
+out/
+
+# Prisma
+dashboard/prisma/migrations/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Claude
+.claude/
+
+# Remotion build
+remotion/out/
+
+# Docker volumes
+docker/data/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Misc
+*.tgz
+docker/postiz.env
