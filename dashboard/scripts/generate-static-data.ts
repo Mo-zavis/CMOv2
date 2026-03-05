@@ -11,7 +11,12 @@ import path from "path";
 import fs from "fs";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+const dbPath = path.resolve(__dirname, "..", "prisma", "dev.db");
+const prisma = new PrismaClient({
+  datasources: {
+    db: { url: `file:${dbPath}` },
+  },
+});
 const outDir = path.join(__dirname, "..", "public", "_data");
 
 function writeJSON(filePath: string, data: unknown) {

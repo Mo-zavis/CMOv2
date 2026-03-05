@@ -10,9 +10,6 @@ node_modules/
 .next/
 out/
 
-# Generated static data (built during Vercel deploy)
-dashboard/public/_data/
-
 # Prisma
 dashboard/prisma/migrations/
 
