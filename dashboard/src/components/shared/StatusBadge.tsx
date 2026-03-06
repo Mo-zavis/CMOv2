@@ -12,6 +12,11 @@ const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
   ACTIVE: { label: "Active", className: "bg-green-100 text-green-700 hover:bg-green-100" },
   PAUSED: { label: "Paused", className: "bg-orange-100 text-orange-700 hover:bg-orange-100" },
   COMPLETED: { label: "Completed", className: "bg-blue-100 text-blue-700 hover:bg-blue-100" },
+  SYNCED: { label: "Synced", className: "bg-sky-100 text-sky-700 hover:bg-sky-100" },
+  SYNC_PENDING: { label: "Sync Pending", className: "bg-orange-100 text-orange-700 hover:bg-orange-100" },
+  GOOGLE_ENABLED: { label: "Enabled", className: "bg-green-100 text-green-700 hover:bg-green-100" },
+  GOOGLE_PAUSED: { label: "Paused (GA)", className: "bg-orange-100 text-orange-700 hover:bg-orange-100" },
+  AD_DISAPPROVED: { label: "Disapproved", className: "bg-red-100 text-red-700 hover:bg-red-100" },
 };
 
 export function StatusBadge({ status }: { status: string }) {

@@ -224,6 +224,8 @@ export default function CampaignDetailPage() {
   const id = params.id as string;
   const [campaign, setCampaign] = useState<CampaignData | null>(null);
   const [showTargeting, setShowTargeting] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
 
   const fetchCampaign = useCallback(async () => {
     const res = await fetchAPI(`/api/campaigns/${id}`);
@@ -231,6 +233,29 @@ export default function CampaignDetailPage() {
       setCampaign(await res.json());
     }
   }, [id]);
+
+  const handleSync = useCallback(async (action: string) => {
+    setSyncing(true);
+    setSyncMessage(null);
+    try {
+      const res = await fetch("/api/google-ads/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, campaignId: id }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSyncMessage(action === "push" ? "Pushed to Google Ads" : action === "pull" ? "Pulled from Google Ads" : "Metrics updated");
+        fetchCampaign(); // refresh data
+      } else {
+        setSyncMessage(data.error || "Sync failed");
+      }
+    } catch {
+      setSyncMessage("Sync request failed");
+    } finally {
+      setSyncing(false);
+    }
+  }, [id, fetchCampaign]);
 
   useEffect(() => {
     fetchCampaign();
@@ -850,6 +875,106 @@ export default function CampaignDetailPage() {
               </Card>
             </div>
           )}
+
+          {/* Google Ads Sync */}
+          {campaign.adGroups.some((g) => g.platform === "google_ads") && (() => {
+            const meta = safeParse<Record<string, unknown>>(campaign.metadata);
+            const gAds = meta?.googleAds as { resourceName?: string; googleId?: string; status?: string; syncedAt?: string; lastMetricsPull?: string; metrics?: { impressions: number; clicks: number; ctr: number; spend: number; conversions: number; costPerConversion: number; dateRange?: { start: string; end: string } } } | undefined;
+
+            return (
+              <>
+                <div>
+                  <h3 className="font-heading font-medium text-sm mb-3">
+                    Google Ads Sync
+                  </h3>
+                  <Card className="p-4 space-y-3">
+                    {gAds?.resourceName ? (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Status</span>
+                          <StatusBadge status={gAds.status === "ENABLED" ? "GOOGLE_ENABLED" : gAds.status === "PAUSED" ? "GOOGLE_PAUSED" : "SYNCED"} />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">Campaign ID</span>
+                          <span className="text-xs font-mono">{gAds.googleId}</span>
+                        </div>
+                        {gAds.syncedAt && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground">Last synced</span>
+                            <span className="text-[10px] text-muted-foreground">{new Date(gAds.syncedAt).toLocaleString()}</span>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">Not yet pushed to Google Ads.</p>
+                    )}
+
+                    {syncMessage && (
+                      <p className="text-[10px] text-[#006828] font-medium">{syncMessage}</p>
+                    )}
+
+                    <div className="flex gap-2 pt-1">
+                      <button
+                        onClick={() => handleSync("push")}
+                        disabled={syncing}
+                        className="text-[10px] px-3 py-1.5 rounded bg-[#006828] text-white hover:bg-[#005520] disabled:opacity-50 font-medium transition-colors"
+                      >
+                        {syncing ? "..." : gAds?.resourceName ? "Re-sync" : "Push to Google Ads"}
+                      </button>
+                      {gAds?.resourceName && (
+                        <>
+                          <button
+                            onClick={() => handleSync("pull")}
+                            disabled={syncing}
+                            className="text-[10px] px-3 py-1.5 rounded border border-border text-foreground hover:bg-muted disabled:opacity-50 font-medium transition-colors"
+                          >
+                            Pull Status
+                          </button>
+                          <button
+                            onClick={() => handleSync("pull-metrics")}
+                            disabled={syncing}
+                            className="text-[10px] px-3 py-1.5 rounded border border-border text-foreground hover:bg-muted disabled:opacity-50 font-medium transition-colors"
+                          >
+                            Pull Metrics
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Google Ads Performance Metrics */}
+                {gAds?.metrics && (
+                  <div>
+                    <h3 className="font-heading font-medium text-sm mb-3">
+                      Google Ads Performance
+                    </h3>
+                    <Card className="p-4 space-y-2">
+                      {gAds.metrics.dateRange && (
+                        <p className="text-[10px] text-muted-foreground mb-2">
+                          {gAds.metrics.dateRange.start} to {gAds.metrics.dateRange.end}
+                        </p>
+                      )}
+                      {[
+                        { label: "Impressions", value: gAds.metrics.impressions.toLocaleString() },
+                        { label: "Clicks", value: gAds.metrics.clicks.toLocaleString() },
+                        { label: "CTR", value: `${(gAds.metrics.ctr * 100).toFixed(2)}%` },
+                        { label: "Avg CPC", value: `$${gAds.metrics.spend && gAds.metrics.clicks ? (gAds.metrics.spend / gAds.metrics.clicks).toFixed(2) : "0.00"}` },
+                        { label: "Conversions", value: String(gAds.metrics.conversions) },
+                        { label: "Cost/Conv", value: `$${gAds.metrics.costPerConversion.toFixed(2)}` },
+                        { label: "Total Spend", value: `$${gAds.metrics.spend.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+                      ].map((row) => (
+                        <div key={row.label} className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">{row.label}</span>
+                          <span className="text-xs font-medium font-mono">{row.value}</span>
+                        </div>
+                      ))}
+                    </Card>
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
           {/* KPIs */}
           <div>

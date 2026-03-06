@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { AssetCard } from "@/components/shared/AssetCard";
 import { Card } from "@/components/ui/card";
+import { GoogleAdsConnectionBanner } from "@/components/shared/GoogleAdsConnectionBanner";
 
 export default async function AdsPage() {
   const assets = await prisma.asset.findMany({
@@ -13,6 +14,8 @@ export default async function AdsPage() {
 
   return (
     <div className="space-y-4">
+      <GoogleAdsConnectionBanner />
+
       <div className="flex items-center justify-between">
         <h2 className="font-heading font-semibold text-base">
           Ad Creatives ({assets.length})

@@ -11,13 +11,17 @@ datasource db {
 // === CORE MODELS ===
 
 model Project {
-  id             String          @id @default(cuid())
-  name           String
-  config         String?         // JSON string for brand settings
-  assets         Asset[]
-  campaigns      Campaign[]
-  calendarEvents CalendarEvent[]
-  createdAt      DateTime        @default(now())
+  id                    String                 @id @default(cuid())
+  name                  String
+  config                String?                // JSON string for brand settings
+  assets                Asset[]
+  campaigns             Campaign[]
+  calendarEvents        CalendarEvent[]
+  loopExecutions        LoopExecution[]
+  metricSnapshots       MetricSnapshot[]
+  researchArtifacts     ResearchArtifact[]
+  optimizationDecisions OptimizationDecision[]
+  createdAt             DateTime               @default(now())
 }
 
 model Asset {
@@ -123,10 +127,12 @@ model Campaign {
   targeting String?   // JSON: demographics, age groups, job titles, industries, locations, audiences
   channels  String?   // JSON: array of channel configs (google_ads, meta_ads, linkedin, etc.)
   kpis      String?   // JSON: target metrics (demo_bookings, cac, roas, etc.)
-  assets    Asset[]
-  adGroups  AdGroup[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  northStarTarget Float?    // target demo bookings for this campaign
+  northStarActual Float?    // current actual demo bookings
+  assets          Asset[]
+  adGroups        AdGroup[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([projectId])
 }
@@ -143,6 +149,7 @@ model AdGroup {
   budget       Float?
   bidStrategy  String?      // "maximize_conversions" | "target_cpa" | "target_roas"
   status       String       @default("DRAFT")
+  metadata     String?      // JSON: googleAds sync state, resource names, metrics
   creatives    AdCreative[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
@@ -215,4 +222,98 @@ model VideoScene {
 
   @@unique([assetId, sceneNumber])
   @@index([assetId])
+}
+
+// === AGENTIC LOOP MODELS ===
+
+model LoopExecution {
+  id           String         @id @default(cuid())
+  projectId    String
+  project      Project        @relation(fields: [projectId], references: [id])
+  campaignId   String?
+  loopType     String         // "ads" | "content_seo" | "social" | "email" | "cross_channel"
+  currentPhase String         // "research" | "planning" | "creation" | "deployment" | "monitoring" | "optimization"
+  status       String         @default("ACTIVE") // ACTIVE | PAUSED | COMPLETED
+  cycleNumber  Int            @default(1)
+  config       String?        // JSON: loop-specific settings (check intervals, thresholds)
+  summary      String?        // JSON: latest cycle summary
+  phases       LoopPhaseLog[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([projectId])
+  @@index([campaignId])
+  @@index([loopType])
+  @@index([status])
+}
+
+model LoopPhaseLog {
+  id              String        @id @default(cuid())
+  loopExecutionId String
+  loopExecution   LoopExecution @relation(fields: [loopExecutionId], references: [id])
+  phase           String        // research | planning | creation | deployment | monitoring | optimization
+  cycleNumber     Int
+  status          String        @default("IN_PROGRESS") // IN_PROGRESS | COMPLETED | FAILED | SKIPPED
+  input           String?       // JSON: what data entered this phase
+  output          String?       // JSON: what this phase produced
+  decisions       String?       // JSON: key decisions made
+  duration        Int?          // seconds
+  createdAt       DateTime      @default(now())
+
+  @@index([loopExecutionId])
+}
+
+model MetricSnapshot {
+  id         String   @id @default(cuid())
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id])
+  campaignId String?
+  channel    String   // "google_ads" | "meta_ads" | "linkedin" | "organic_search" | "social" | "email" | "overall"
+  metricType String   // "impressions" | "clicks" | "ctr" | "spend" | "conversions" | "cpa" | "roas" | "demo_bookings" | "website_visits" | "seo_rank"
+  value      Float
+  metadata   String?  // JSON: extra context
+  period     String   // "daily" | "weekly" | "monthly"
+  recordedAt DateTime @default(now())
+
+  @@index([projectId])
+  @@index([campaignId])
+  @@index([channel])
+  @@index([metricType])
+  @@index([recordedAt])
+}
+
+model OptimizationDecision {
+  id              String   @id @default(cuid())
+  projectId       String
+  project         Project  @relation(fields: [projectId], references: [id])
+  loopExecutionId String?
+  campaignId      String?
+  decisionType    String   // "budget_realloc" | "targeting_change" | "creative_swap" | "keyword_add" | "keyword_pause" | "bid_adjust" | "channel_pause" | "content_refresh"
+  rationale       String   // human-readable explanation
+  before          String   // JSON: state before change
+  after           String   // JSON: state after change
+  impact          String?  // JSON: measured impact after N days
+  status          String   @default("PROPOSED") // PROPOSED | APPROVED | APPLIED | REJECTED | MEASURED
+  createdAt       DateTime @default(now())
+
+  @@index([projectId])
+  @@index([campaignId])
+  @@index([decisionType])
+  @@index([status])
+}
+
+model ResearchArtifact {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id])
+  campaignId   String?
+  artifactType String   // "persona" | "keyword_list" | "competitor_analysis" | "audience_insight" | "ad_library_scan" | "content_gap"
+  title        String
+  data         String   // JSON: the research output
+  source       String?  // where the data came from
+  createdAt    DateTime @default(now())
+
+  @@index([projectId])
+  @@index([campaignId])
+  @@index([artifactType])
 }

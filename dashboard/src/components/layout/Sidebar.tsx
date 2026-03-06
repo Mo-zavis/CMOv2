@@ -6,7 +6,10 @@ import { usePathname } from "next/navigation";
 const NAV_ITEMS = [
   {
     section: "Overview",
-    items: [{ label: "Dashboard", href: "/", icon: "grid" }],
+    items: [
+      { label: "Dashboard", href: "/", icon: "grid" },
+      { label: "Command Center", href: "/command-center", icon: "zap" },
+    ],
   },
   {
     section: "Create",
@@ -29,6 +32,7 @@ const NAV_ITEMS = [
     items: [
       { label: "Campaigns", href: "/campaigns", icon: "target" },
       { label: "Calendar", href: "/calendar", icon: "calendar" },
+      { label: "Loops", href: "/loops", icon: "refresh" },
       { label: "Analytics", href: "/analytics", icon: "bar-chart" },
     ],
   },
@@ -104,6 +108,16 @@ const ICONS: Record<string, React.ReactNode> = {
   network: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="5" r="3" /><circle cx="5" cy="19" r="3" /><circle cx="19" cy="19" r="3" /><line x1="12" y1="8" x2="5" y2="16" /><line x1="12" y1="8" x2="19" y2="16" />
+    </svg>
+  ),
+  zap: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  ),
+  refresh: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" />
     </svg>
   ),
   sparkles: (

@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <!-- Interlocking hexagonal pattern -->
+    <pattern id="hexPattern" x="0" y="0" width="100" height="86.6" patternUnits="userSpaceOnUse">
+      <polygon points="50,0 100,25 100,75 50,100 0,75 0,25" fill="none" stroke="#006828" stroke-width="0.4" opacity="0.06" transform="translate(0,-6.7)"/>
+      <polygon points="50,43.3 100,68.3 100,118.3 50,143.3 0,118.3 0,68.3" fill="none" stroke="#006828" stroke-width="0.4" opacity="0.06" transform="translate(50,-6.7)"/>
+    </pattern>
+    <linearGradient id="timelineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#006828;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#004d1e;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1350" fill="#f8f8f6"/>
+  <rect width="1080" height="1350" fill="url(#hexPattern)"/>
+
+  <!-- Green header -->
+  <rect x="0" y="0" width="1080" height="240" fill="#006828"/>
+
+  <!-- Header decorative crescents -->
+  <g opacity="0.1">
+    <path d="M950,40 A50,50 0 1,1 950,140 A38,38 0 1,0 950,40" fill="#f8f8f6"/>
+    <circle cx="880" cy="50" r="3" fill="#f8f8f6"/>
+    <circle cx="1020" cy="130" r="2" fill="#f8f8f6"/>
+  </g>
+
+  <!-- Scalloped bottom edge of header -->
+  <path d="M0,240 Q27,220 54,240 Q81,220 108,240 Q135,220 162,240 Q189,220 216,240 Q243,220 270,240 Q297,220 324,240 Q351,220 378,240 Q405,220 432,240 Q459,220 486,240 Q513,220 540,240 Q567,220 594,240 Q621,220 648,240 Q675,220 702,240 Q729,220 756,240 Q783,220 810,240 Q837,220 864,240 Q891,220 918,240 Q945,220 972,240 Q999,220 1026,240 Q1053,220 1080,240 L1080,260 Q1053,240 1026,260 Q999,240 972,260 Q945,240 918,260 Q891,240 864,260 Q837,240 810,260 Q783,240 756,260 Q729,240 702,260 Q675,240 648,260 Q621,240 594,260 Q567,240 540,260 Q513,240 486,260 Q459,240 432,260 Q405,240 378,260 Q351,240 324,260 Q297,240 270,260 Q243,240 216,260 Q189,240 162,260 Q135,240 108,260 Q81,240 54,260 Q27,240 0,260Z" fill="#006828"/>
+
+  <!-- Header text -->
+  <text x="80" y="90" font-family="'Geist', sans-serif" font-size="20" fill="#f8f8f6" opacity="0.6" letter-spacing="4">RAMADAN SCHEDULING</text>
+  <text x="80" y="155" font-family="'Bricolage Grotesque', sans-serif" font-size="62" font-weight="700" fill="#f8f8f6" letter-spacing="-1">Smart Scheduling</text>
+  <text x="80" y="220" font-family="'Bricolage Grotesque', sans-serif" font-size="62" font-weight="700" fill="#f8f8f6" letter-spacing="-1">for Ramadan</text>
+
+  <!-- Timeline visualization -->
+  <!-- Timeline center line -->
+  <line x1="200" y1="340" x2="200" y2="1080" stroke="#006828" stroke-width="3" opacity="0.2"/>
+
+  <!-- Time block: Suhoor (Pre-dawn) -->
+  <g transform="translate(0, 330)">
+    <circle cx="200" cy="20" r="16" fill="#006828"/>
+    <circle cx="200" cy="20" r="8" fill="#f8f8f6"/>
+    <rect x="260" y="-10" width="720" height="110" rx="12" fill="#006828" opacity="0.06"/>
+    <rect x="260" y="-10" width="6" height="110" rx="3" fill="#006828"/>
+    <text x="290" y="18" font-family="'Geist', sans-serif" font-size="18" fill="#006828" font-weight="600" letter-spacing="2">3:30 AM - 5:00 AM</text>
+    <text x="290" y="50" font-family="'Bricolage Grotesque', sans-serif" font-size="30" font-weight="600" fill="#1c1c1c">Suhoor Window</text>
+    <text x="290" y="82" font-family="'Geist', sans-serif" font-size="22" fill="#1c1c1c" opacity="0.55">Send medication reminders before fast begins</text>
+  </g>
+
+  <!-- Time block: Morning -->
+  <g transform="translate(0, 490)">
+    <circle cx="200" cy="20" r="16" fill="#006828"/>
+    <circle cx="200" cy="20" r="8" fill="#f8f8f6"/>
+    <rect x="260" y="-10" width="720" height="110" rx="12" fill="#006828" opacity="0.06"/>
+    <rect x="260" y="-10" width="6" height="110" rx="3" fill="#006828"/>
+    <text x="290" y="18" font-family="'Geist', sans-serif" font-size="18" fill="#006828" font-weight="600" letter-spacing="2">8:00 AM - 11:00 AM</text>
+    <text x="290" y="50" font-family="'Bricolage Grotesque', sans-serif" font-size="30" font-weight="600" fill="#1c1c1c">Peak Appointment Hours</text>
+    <text x="290" y="82" font-family="'Geist', sans-serif" font-size="22" fill="#1c1c1c" opacity="0.55">Schedule check-ups and non-fasting procedures</text>
+  </g>
+
+  <!-- Time block: Afternoon (Low energy) -->
+  <g transform="translate(0, 650)">
+    <circle cx="200" cy="20" r="16" fill="#ecebe8" stroke="#006828" stroke-width="2"/>
+    <rect x="260" y="-10" width="720" height="110" rx="12" fill="#ecebe8" opacity="0.5"/>
+    <rect x="260" y="-10" width="6" height="110" rx="3" fill="#ecebe8"/>
+    <text x="290" y="18" font-family="'Geist', sans-serif" font-size="18" fill="#1c1c1c" opacity="0.4" letter-spacing="2">1:00 PM - 4:00 PM</text>
+    <text x="290" y="50" font-family="'Bricolage Grotesque', sans-serif" font-size="30" font-weight="600" fill="#1c1c1c" opacity="0.5">Rest Period</text>
+    <text x="290" y="82" font-family="'Geist', sans-serif" font-size="22" fill="#1c1c1c" opacity="0.35">Minimize appointments, offer telehealth only</text>
+  </g>
+
+  <!-- Time block: Iftar -->
+  <g transform="translate(0, 810)">
+    <circle cx="200" cy="20" r="16" fill="#006828"/>
+    <circle cx="200" cy="20" r="8" fill="#f8f8f6"/>
+    <rect x="260" y="-10" width="720" height="110" rx="12" fill="#006828" opacity="0.06"/>
+    <rect x="260" y="-10" width="6" height="110" rx="3" fill="#006828"/>
+    <text x="290" y="18" font-family="'Geist', sans-serif" font-size="18" fill="#006828" font-weight="600" letter-spacing="2">6:30 PM - 7:30 PM</text>
+    <text x="290" y="50" font-family="'Bricolage Grotesque', sans-serif" font-size="30" font-weight="600" fill="#1c1c1c">Iftar Break</text>
+    <text x="290" y="82" font-family="'Geist', sans-serif" font-size="22" fill="#1c1c1c" opacity="0.55">No appointments. Send wellness check-in messages</text>
+  </g>
+
+  <!-- Time block: Evening -->
+  <g transform="translate(0, 970)">
+    <circle cx="200" cy="20" r="16" fill="#006828"/>
+    <circle cx="200" cy="20" r="8" fill="#f8f8f6"/>
+    <rect x="260" y="-10" width="720" height="110" rx="12" fill="#006828" opacity="0.06"/>
+    <rect x="260" y="-10" width="6" height="110" rx="3" fill="#006828"/>
+    <text x="290" y="18" font-family="'Geist', sans-serif" font-size="18" fill="#006828" font-weight="600" letter-spacing="2">8:00 PM - 10:00 PM</text>
+    <text x="290" y="50" font-family="'Bricolage Grotesque', sans-serif" font-size="30" font-weight="600" fill="#1c1c1c">Evening Window</text>
+    <text x="290" y="82" font-family="'Geist', sans-serif" font-size="22" fill="#1c1c1c" opacity="0.55">Extended hours for follow-ups and consultations</text>
+  </g>
+
+  <!-- CTA -->
+  <text x="540" y="1170" text-anchor="middle" font-family="'Geist', sans-serif" font-size="26" fill="#006828" font-weight="600">Automate culturally-aware scheduling with Zavis</text>
+
+  <!-- Zavis branding footer -->
+  <rect x="0" y="1250" width="1080" height="100" fill="#006828"/>
+  <text x="540" y="1310" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="38" font-weight="700" fill="#f8f8f6" letter-spacing="6">ZAVIS</text>
+  <text x="540" y="1338" text-anchor="middle" font-family="'Geist', sans-serif" font-size="14" fill="#f8f8f6" opacity="0.7" letter-spacing="3">AI-POWERED PATIENT ENGAGEMENT</text>
+</svg>

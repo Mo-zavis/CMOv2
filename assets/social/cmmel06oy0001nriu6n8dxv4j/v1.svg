@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <!-- Celebratory geometric pattern -->
+    <pattern id="celebrationPattern" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+      <rect width="160" height="160" fill="none"/>
+      <!-- Interlocking 8-point stars -->
+      <polygon points="80,10 90,35 115,25 100,50 125,55 100,60 115,85 90,75 80,100 70,75 45,85 60,60 35,55 60,50 45,25 70,35" fill="none" stroke="#006828" stroke-width="0.6" opacity="0.08"/>
+      <!-- Corner rosettes -->
+      <circle cx="0" cy="0" r="20" fill="none" stroke="#006828" stroke-width="0.4" opacity="0.05"/>
+      <circle cx="160" cy="0" r="20" fill="none" stroke="#006828" stroke-width="0.4" opacity="0.05"/>
+      <circle cx="0" cy="160" r="20" fill="none" stroke="#006828" stroke-width="0.4" opacity="0.05"/>
+      <circle cx="160" cy="160" r="20" fill="none" stroke="#006828" stroke-width="0.4" opacity="0.05"/>
+      <!-- Cross connectors -->
+      <line x1="0" y1="80" x2="35" y2="55" stroke="#006828" stroke-width="0.3" opacity="0.04"/>
+      <line x1="160" y1="80" x2="125" y2="55" stroke="#006828" stroke-width="0.3" opacity="0.04"/>
+    </pattern>
+    <radialGradient id="warmGlow" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" style="stop-color:#006828;stop-opacity:0.08"/>
+      <stop offset="60%" style="stop-color:#006828;stop-opacity:0.03"/>
+      <stop offset="100%" style="stop-color:#006828;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="goldAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#006828;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#004d1e;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Warm background -->
+  <rect width="1080" height="1350" fill="#f8f8f6"/>
+  <rect width="1080" height="1350" fill="url(#celebrationPattern)"/>
+  <rect width="1080" height="1350" fill="url(#warmGlow)"/>
+
+  <!-- Top ornamental band -->
+  <rect x="0" y="0" width="1080" height="10" fill="#006828"/>
+  <!-- Arch pattern under band -->
+  <g opacity="0.12">
+    <path d="M0,60 Q45,10 90,60 Q135,10 180,60 Q225,10 270,60 Q315,10 360,60 Q405,10 450,60 Q495,10 540,60 Q585,10 630,60 Q675,10 720,60 Q765,10 810,60 Q855,10 900,60 Q945,10 990,60 Q1035,10 1080,60" fill="none" stroke="#006828" stroke-width="1.5"/>
+  </g>
+
+  <!-- Decorative corner ornaments -->
+  <!-- Top-left ornament -->
+  <g transform="translate(60, 80)" opacity="0.15">
+    <polygon points="0,50 25,0 50,50 25,40" fill="none" stroke="#006828" stroke-width="1.5"/>
+    <circle cx="25" cy="25" r="12" fill="none" stroke="#006828" stroke-width="1"/>
+  </g>
+  <!-- Top-right ornament -->
+  <g transform="translate(970, 80)" opacity="0.15">
+    <polygon points="0,50 25,0 50,50 25,40" fill="none" stroke="#006828" stroke-width="1.5"/>
+    <circle cx="25" cy="25" r="12" fill="none" stroke="#006828" stroke-width="1"/>
+  </g>
+
+  <!-- Large central crescent moon with star -->
+  <g transform="translate(540, 350)">
+    <!-- Outer decorative ring -->
+    <circle cx="0" cy="0" r="200" fill="none" stroke="#006828" stroke-width="1" opacity="0.08"/>
+    <circle cx="0" cy="0" r="210" fill="none" stroke="#006828" stroke-width="0.5" opacity="0.05"/>
+
+    <!-- Crescent moon -->
+    <path d="M-30,-160 A160,160 0 1,1 -30,160 A120,120 0 1,0 -30,-160" fill="url(#goldAccent)"/>
+
+    <!-- Star -->
+    <g transform="translate(110, -100)">
+      <polygon points="0,-35 10,-12 35,-12 16,4 24,28 0,14 -24,28 -16,4 -35,-12 -10,-12" fill="#006828"/>
+    </g>
+
+    <!-- Smaller decorative stars -->
+    <g opacity="0.4">
+      <polygon points="0,-8 3,-3 8,-3 4,1 6,6 0,3 -6,6 -4,1 -8,-3 -3,-3" fill="#006828" transform="translate(-150, -80)"/>
+      <polygon points="0,-6 2,-2 6,-2 3,1 4,5 0,2 -4,5 -3,1 -6,-2 -2,-2" fill="#006828" transform="translate(170, -40)"/>
+      <polygon points="0,-6 2,-2 6,-2 3,1 4,5 0,2 -4,5 -3,1 -6,-2 -2,-2" fill="#006828" transform="translate(-170, 60)"/>
+      <polygon points="0,-5 2,-2 5,-2 2,0 3,4 0,2 -3,4 -2,0 -5,-2 -2,-2" fill="#006828" transform="translate(150, 100)"/>
+      <polygon points="0,-5 2,-2 5,-2 2,0 3,4 0,2 -3,4 -2,0 -5,-2 -2,-2" fill="#006828" transform="translate(-100, 140)"/>
+    </g>
+
+    <!-- Radiating light lines -->
+    <g opacity="0.06">
+      <line x1="0" y1="-220" x2="0" y2="-250" stroke="#006828" stroke-width="1.5"/>
+      <line x1="110" y1="-190" x2="130" y2="-220" stroke="#006828" stroke-width="1.5"/>
+      <line x1="190" y1="-110" x2="220" y2="-130" stroke="#006828" stroke-width="1.5"/>
+      <line x1="220" y1="0" x2="250" y2="0" stroke="#006828" stroke-width="1.5"/>
+      <line x1="190" y1="110" x2="220" y2="130" stroke="#006828" stroke-width="1.5"/>
+      <line x1="-190" y1="-110" x2="-220" y2="-130" stroke="#006828" stroke-width="1.5"/>
+      <line x1="-220" y1="0" x2="-250" y2="0" stroke="#006828" stroke-width="1.5"/>
+      <line x1="-190" y1="110" x2="-220" y2="130" stroke="#006828" stroke-width="1.5"/>
+    </g>
+  </g>
+
+  <!-- Main heading -->
+  <text x="540" y="640" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="108" font-weight="700" fill="#1c1c1c" letter-spacing="-2">Eid Mubarak</text>
+
+  <!-- Decorative divider with diamond -->
+  <g transform="translate(540, 690)" opacity="0.35">
+    <line x1="-180" y1="0" x2="-25" y2="0" stroke="#006828" stroke-width="1.5"/>
+    <polygon points="0,-10 10,0 0,10 -10,0" fill="#006828"/>
+    <line x1="25" y1="0" x2="180" y2="0" stroke="#006828" stroke-width="1.5"/>
+  </g>
+
+  <!-- Blessing message -->
+  <text x="540" y="770" text-anchor="middle" font-family="'Geist', sans-serif" font-size="34" fill="#1c1c1c" opacity="0.7">From our team to yours,</text>
+  <text x="540" y="820" text-anchor="middle" font-family="'Geist', sans-serif" font-size="34" fill="#1c1c1c" opacity="0.7">may this Eid bring joy, health,</text>
+  <text x="540" y="870" text-anchor="middle" font-family="'Geist', sans-serif" font-size="34" fill="#1c1c1c" opacity="0.7">and renewed strength.</text>
+
+  <!-- Warm closing -->
+  <text x="540" y="960" text-anchor="middle" font-family="'Geist', sans-serif" font-size="28" fill="#006828" letter-spacing="1">Celebrating with the healthcare communities we serve.</text>
+
+  <!-- Bottom decorative element - interlocking arches -->
+  <g opacity="0.1" transform="translate(0, 1040)">
+    <path d="M0,60 Q54,0 108,60 Q162,0 216,60 Q270,0 324,60 Q378,0 432,60 Q486,0 540,60 Q594,0 648,60 Q702,0 756,60 Q810,0 864,60 Q918,0 972,60 Q1026,0 1080,60" fill="none" stroke="#006828" stroke-width="2"/>
+    <path d="M54,60 Q108,0 162,60 Q216,0 270,60 Q324,0 378,60 Q432,0 486,60 Q540,0 594,60 Q648,0 702,60 Q756,0 810,60 Q864,0 918,60 Q972,0 1026,60" fill="none" stroke="#006828" stroke-width="1.5" transform="translate(0, 15)"/>
+  </g>
+
+  <!-- Bottom corner ornaments -->
+  <g transform="translate(60, 1130)" opacity="0.12">
+    <polygon points="25,0 50,25 25,50 0,25" fill="none" stroke="#006828" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(970, 1130)" opacity="0.12">
+    <polygon points="25,0 50,25 25,50 0,25" fill="none" stroke="#006828" stroke-width="1.5"/>
+  </g>
+
+  <!-- Zavis branding footer -->
+  <rect x="0" y="1220" width="1080" height="130" fill="#006828"/>
+  <text x="540" y="1290" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="44" font-weight="700" fill="#f8f8f6" letter-spacing="6">ZAVIS</text>
+  <text x="540" y="1328" text-anchor="middle" font-family="'Geist', sans-serif" font-size="16" fill="#f8f8f6" opacity="0.7" letter-spacing="3">AI-POWERED PATIENT ENGAGEMENT</text>
+</svg>

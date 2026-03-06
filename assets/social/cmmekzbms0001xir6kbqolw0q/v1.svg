@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <!-- Islamic geometric pattern tile -->
+    <pattern id="islamicPattern1" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+      <rect width="120" height="120" fill="none"/>
+      <!-- 8-point star pattern -->
+      <polygon points="60,10 70,40 100,30 80,55 110,60 80,65 100,90 70,80 60,110 50,80 20,90 40,65 10,60 40,55 20,30 50,40" fill="none" stroke="#006828" stroke-width="0.8" opacity="0.15"/>
+      <circle cx="60" cy="60" r="15" fill="none" stroke="#006828" stroke-width="0.5" opacity="0.1"/>
+      <circle cx="0" cy="0" r="8" fill="none" stroke="#006828" stroke-width="0.5" opacity="0.1"/>
+      <circle cx="120" cy="0" r="8" fill="none" stroke="#006828" stroke-width="0.5" opacity="0.1"/>
+      <circle cx="0" cy="120" r="8" fill="none" stroke="#006828" stroke-width="0.5" opacity="0.1"/>
+      <circle cx="120" cy="120" r="8" fill="none" stroke="#006828" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+    <!-- Gradient for crescent moon -->
+    <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#006828;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#004d1e;stop-opacity:1"/>
+    </linearGradient>
+    <!-- Subtle radial glow -->
+    <radialGradient id="glow1" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" style="stop-color:#006828;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#006828;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1350" fill="#f8f8f6"/>
+
+  <!-- Geometric pattern overlay -->
+  <rect width="1080" height="1350" fill="url(#islamicPattern1)"/>
+
+  <!-- Subtle glow behind main content -->
+  <ellipse cx="540" cy="500" rx="500" ry="400" fill="url(#glow1)"/>
+
+  <!-- Top decorative border - interlocking arches -->
+  <g opacity="0.2">
+    <path d="M0,80 Q90,0 180,80 Q270,0 360,80 Q450,0 540,80 Q630,0 720,80 Q810,0 900,80 Q990,0 1080,80" fill="none" stroke="#006828" stroke-width="2"/>
+    <path d="M0,100 Q90,20 180,100 Q270,20 360,100 Q450,20 540,100 Q630,20 720,100 Q810,20 900,100 Q990,20 1080,100" fill="none" stroke="#006828" stroke-width="1.5"/>
+  </g>
+
+  <!-- Crescent Moon with Healthcare Cross integrated -->
+  <g transform="translate(540, 420)">
+    <!-- Outer crescent -->
+    <path d="M-20,-180 A180,180 0 1,1 -20,180 A140,140 0 1,0 -20,-180" fill="url(#moonGrad)"/>
+    <!-- Healthcare cross inside crescent opening -->
+    <g transform="translate(80, 0)">
+      <rect x="-12" y="-40" width="24" height="80" rx="4" fill="#006828" opacity="0.9"/>
+      <rect x="-40" y="-12" width="80" height="24" rx="4" fill="#006828" opacity="0.9"/>
+    </g>
+    <!-- Star accent -->
+    <g transform="translate(140, -120)">
+      <polygon points="0,-25 7,-8 25,-8 11,3 17,20 0,11 -17,20 -11,3 -25,-8 -7,-8" fill="#006828" opacity="0.7"/>
+    </g>
+    <!-- Small decorative stars -->
+    <circle cx="-160" cy="-100" r="3" fill="#006828" opacity="0.4"/>
+    <circle cx="180" cy="-60" r="2.5" fill="#006828" opacity="0.3"/>
+    <circle cx="-120" cy="120" r="2" fill="#006828" opacity="0.35"/>
+    <circle cx="200" cy="80" r="3.5" fill="#006828" opacity="0.25"/>
+  </g>
+
+  <!-- Main heading -->
+  <text x="540" y="720" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="96" font-weight="700" fill="#1c1c1c" letter-spacing="-1">Ramadan Mubarak</text>
+
+  <!-- Decorative line -->
+  <line x1="340" y1="760" x2="740" y2="760" stroke="#006828" stroke-width="2" opacity="0.4"/>
+
+  <!-- Subheading -->
+  <text x="540" y="830" text-anchor="middle" font-family="'Geist', sans-serif" font-size="36" fill="#1c1c1c" opacity="0.7" letter-spacing="0.5">Wishing our healthcare community</text>
+  <text x="540" y="880" text-anchor="middle" font-family="'Geist', sans-serif" font-size="36" fill="#1c1c1c" opacity="0.7" letter-spacing="0.5">a blessed and peaceful month</text>
+
+  <!-- Message -->
+  <text x="540" y="970" text-anchor="middle" font-family="'Geist', sans-serif" font-size="28" fill="#006828" opacity="0.8" letter-spacing="1">Compassionate care, always.</text>
+
+  <!-- Bottom geometric border -->
+  <g opacity="0.15">
+    <!-- Repeating diamond pattern -->
+    <g transform="translate(0, 1100)">
+      <path d="M0,0 L40,40 L80,0 L120,40 L160,0 L200,40 L240,0 L280,40 L320,0 L360,40 L400,0 L440,40 L480,0 L520,40 L560,0 L600,40 L640,0 L680,40 L720,0 L760,40 L800,0 L840,40 L880,0 L920,40 L960,0 L1000,40 L1040,0 L1080,40" fill="none" stroke="#006828" stroke-width="1.5"/>
+    </g>
+  </g>
+
+  <!-- Zavis branding footer -->
+  <rect x="0" y="1220" width="1080" height="130" fill="#006828"/>
+  <text x="540" y="1295" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="42" font-weight="700" fill="#f8f8f6" letter-spacing="6">ZAVIS</text>
+  <text x="540" y="1330" text-anchor="middle" font-family="'Geist', sans-serif" font-size="16" fill="#f8f8f6" opacity="0.7" letter-spacing="3">AI-POWERED PATIENT ENGAGEMENT</text>
+</svg>

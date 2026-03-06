@@ -192,6 +192,26 @@ const NODES: EcoNode[] = [
     ],
   },
   {
+    id: "google-ads",
+    label: "Google Ads API",
+    category: "api",
+    ring: 2,
+    angle: 300,
+    description:
+      "Google Ads REST API v18 for campaign management, bidding, keyword targeting, and performance reporting. Push campaigns from local DB and pull metrics back.",
+    status: "active",
+    tech: "Google Ads REST API v18, OAuth2, GAQL",
+    connections: ["skills", "scripts", "outputs"],
+    dataFlow:
+      "Claude Code pushes campaigns via google-ads-client.ts CLI. Dashboard reads metrics via API routes. Performance data stored in campaign metadata JSON.",
+    keyFiles: [
+      "scripts/google-ads-client.ts",
+      "scripts/google-ads-setup.ts",
+      "dashboard/src/lib/google-ads.ts",
+      "dashboard/src/app/api/google-ads/",
+    ],
+  },
+  {
     id: "dashboard",
     label: "Next.js Dashboard",
     category: "dashboard",

@@ -515,6 +515,320 @@ async function main() {
       break;
     }
 
+    // === AGENTIC LOOP COMMANDS ===
+
+    case "create-loop": {
+      const loopType = getFlag("loopType");
+      const campaignId = getFlag("campaignId");
+      const config = getFlag("config");
+
+      if (!loopType) {
+        console.error("Required: --loopType (ads | content_seo | social | email | cross_channel)");
+        process.exit(1);
+      }
+
+      let project = await prisma.project.findFirst({ where: { name: "Zavis" } });
+      if (!project) {
+        project = await prisma.project.create({ data: { name: "Zavis" } });
+      }
+
+      const firstPhases: Record<string, string> = {
+        ads: "research",
+        content_seo: "research",
+        social: "planning",
+        email: "planning",
+        cross_channel: "aggregation",
+      };
+
+      const loop = await prisma.loopExecution.create({
+        data: {
+          projectId: project.id,
+          campaignId: campaignId ?? null,
+          loopType,
+          currentPhase: firstPhases[loopType] || "research",
+          status: "ACTIVE",
+          cycleNumber: 1,
+          config: config ?? null,
+        },
+      });
+
+      // Create initial phase log
+      await prisma.loopPhaseLog.create({
+        data: {
+          loopExecutionId: loop.id,
+          phase: loop.currentPhase,
+          cycleNumber: 1,
+          status: "IN_PROGRESS",
+        },
+      });
+
+      console.log(JSON.stringify({ id: loop.id, loopType, phase: loop.currentPhase, message: "Loop created" }));
+      break;
+    }
+
+    case "advance-loop": {
+      const loopId = getFlag("loopId");
+      const phase = getFlag("phase");
+      const output = getFlag("output");
+      const decisions = getFlag("decisions");
+
+      if (!loopId || !phase) {
+        console.error("Required: --loopId --phase");
+        process.exit(1);
+      }
+
+      const loop = await prisma.loopExecution.findUnique({ where: { id: loopId } });
+      if (!loop) {
+        console.error("Loop not found");
+        process.exit(1);
+      }
+
+      // Complete current phase log
+      await prisma.loopPhaseLog.updateMany({
+        where: {
+          loopExecutionId: loopId,
+          phase: loop.currentPhase,
+          cycleNumber: loop.cycleNumber,
+          status: "IN_PROGRESS",
+        },
+        data: {
+          status: "COMPLETED",
+          output: output ?? null,
+          decisions: decisions ?? null,
+        },
+      });
+
+      // Determine if we're cycling (optimization → monitoring means new cycle)
+      const monitorPhases = ["monitoring", "tracking", "aggregation"];
+      const optimizePhases = ["optimization", "adjustment", "reallocation"];
+      const newCycle =
+        optimizePhases.includes(loop.currentPhase) && monitorPhases.includes(phase)
+          ? loop.cycleNumber + 1
+          : loop.cycleNumber;
+
+      // Update loop
+      await prisma.loopExecution.update({
+        where: { id: loopId },
+        data: {
+          currentPhase: phase,
+          cycleNumber: newCycle,
+        },
+      });
+
+      // Create new phase log
+      await prisma.loopPhaseLog.create({
+        data: {
+          loopExecutionId: loopId,
+          phase,
+          cycleNumber: newCycle,
+          status: "IN_PROGRESS",
+        },
+      });
+
+      console.log(JSON.stringify({ loopId, phase, cycleNumber: newCycle, message: "Loop advanced" }));
+      break;
+    }
+
+    case "record-metric": {
+      const channel = getFlag("channel");
+      const metricType = getFlag("metricType");
+      const value = getFlag("value");
+      const campaignId = getFlag("campaignId");
+      const period = getFlag("period");
+      const metadata = getFlag("metadata");
+
+      if (!channel || !metricType || !value) {
+        console.error("Required: --channel --metricType --value");
+        process.exit(1);
+      }
+
+      let project = await prisma.project.findFirst({ where: { name: "Zavis" } });
+      if (!project) {
+        project = await prisma.project.create({ data: { name: "Zavis" } });
+      }
+
+      const metric = await prisma.metricSnapshot.create({
+        data: {
+          projectId: project.id,
+          campaignId: campaignId ?? null,
+          channel,
+          metricType,
+          value: parseFloat(value),
+          metadata: metadata ?? null,
+          period: period ?? "daily",
+        },
+      });
+
+      console.log(JSON.stringify({ id: metric.id, message: "Metric recorded" }));
+      break;
+    }
+
+    case "record-optimization": {
+      const campaignId = getFlag("campaignId");
+      const loopExecutionId = getFlag("loopId");
+      const decisionType = getFlag("decisionType");
+      const rationale = getFlag("rationale");
+      const before = getFlag("before");
+      const after = getFlag("after");
+
+      if (!decisionType || !rationale || !before || !after) {
+        console.error("Required: --decisionType --rationale --before --after");
+        process.exit(1);
+      }
+
+      let project = await prisma.project.findFirst({ where: { name: "Zavis" } });
+      if (!project) {
+        project = await prisma.project.create({ data: { name: "Zavis" } });
+      }
+
+      const decision = await prisma.optimizationDecision.create({
+        data: {
+          projectId: project.id,
+          loopExecutionId: loopExecutionId ?? null,
+          campaignId: campaignId ?? null,
+          decisionType,
+          rationale,
+          before,
+          after,
+          status: "PROPOSED",
+        },
+      });
+
+      console.log(JSON.stringify({ id: decision.id, message: "Optimization decision recorded" }));
+      break;
+    }
+
+    case "apply-optimization": {
+      const optimizationId = getFlag("optimizationId");
+
+      if (!optimizationId) {
+        console.error("Required: --optimizationId");
+        process.exit(1);
+      }
+
+      await prisma.optimizationDecision.update({
+        where: { id: optimizationId },
+        data: { status: "APPLIED" },
+      });
+
+      console.log(JSON.stringify({ optimizationId, message: "Optimization applied" }));
+      break;
+    }
+
+    case "measure-optimization": {
+      const optimizationId = getFlag("optimizationId");
+      const impact = getFlag("impact");
+
+      if (!optimizationId || !impact) {
+        console.error("Required: --optimizationId --impact");
+        process.exit(1);
+      }
+
+      await prisma.optimizationDecision.update({
+        where: { id: optimizationId },
+        data: { status: "MEASURED", impact },
+      });
+
+      console.log(JSON.stringify({ optimizationId, message: "Optimization impact measured" }));
+      break;
+    }
+
+    case "create-research": {
+      const artifactType = getFlag("artifactType");
+      const title = getFlag("title");
+      const data = getFlag("data");
+      const campaignId = getFlag("campaignId");
+      const source = getFlag("source");
+
+      if (!artifactType || !title || !data) {
+        console.error("Required: --artifactType --title --data");
+        process.exit(1);
+      }
+
+      let project = await prisma.project.findFirst({ where: { name: "Zavis" } });
+      if (!project) {
+        project = await prisma.project.create({ data: { name: "Zavis" } });
+      }
+
+      const artifact = await prisma.researchArtifact.create({
+        data: {
+          projectId: project.id,
+          campaignId: campaignId ?? null,
+          artifactType,
+          title,
+          data,
+          source: source ?? null,
+        },
+      });
+
+      console.log(JSON.stringify({ id: artifact.id, message: "Research artifact created" }));
+      break;
+    }
+
+    case "update-north-star": {
+      const campaignId = getFlag("campaignId");
+      const actual = getFlag("actual");
+
+      if (!campaignId || !actual) {
+        console.error("Required: --campaignId --actual");
+        process.exit(1);
+      }
+
+      await prisma.campaign.update({
+        where: { id: campaignId },
+        data: { northStarActual: parseFloat(actual) },
+      });
+
+      console.log(JSON.stringify({ campaignId, northStarActual: parseFloat(actual), message: "North star updated" }));
+      break;
+    }
+
+    case "loop-status": {
+      const campaignId = getFlag("campaignId");
+      const loopType = getFlag("loopType");
+
+      const where: Record<string, unknown> = {};
+      if (campaignId) where.campaignId = campaignId;
+      if (loopType) where.loopType = loopType;
+
+      const loops = await prisma.loopExecution.findMany({
+        where,
+        orderBy: { updatedAt: "desc" },
+        include: {
+          phases: {
+            orderBy: { createdAt: "desc" },
+            take: 5,
+          },
+        },
+      });
+
+      console.log(JSON.stringify(loops, null, 2));
+      break;
+    }
+
+    case "metrics-summary": {
+      const channel = getFlag("channel");
+      const campaignId = getFlag("campaignId");
+      const days = getFlag("days");
+
+      const since = new Date();
+      since.setDate(since.getDate() - (days ? parseInt(days) : 30));
+
+      const where: Record<string, unknown> = {
+        recordedAt: { gte: since },
+      };
+      if (channel) where.channel = channel;
+      if (campaignId) where.campaignId = campaignId;
+
+      const metrics = await prisma.metricSnapshot.findMany({
+        where,
+        orderBy: { recordedAt: "desc" },
+      });
+
+      console.log(JSON.stringify(metrics, null, 2));
+      break;
+    }
+
     case "mark-feedback-actioned": {
       const feedbackId = getFlag("feedbackId");
       const actionTaken = getFlag("actionTaken");
@@ -539,7 +853,7 @@ async function main() {
 
     default:
       console.error(`Unknown command: ${command}`);
-      console.error("Available commands: seed-project, create-asset, add-version, add-brand-check, read-feedback, mark-feedback-actioned, create-campaign, create-ad-group, create-ad-creative, create-video-scene, update-scene-status, update-scene-files, list-scenes, create-calendar-event, list-calendar-events, update-calendar-event");
+      console.error("Available commands: seed-project, create-asset, add-version, add-brand-check, read-feedback, mark-feedback-actioned, create-campaign, create-ad-group, create-ad-creative, create-video-scene, update-scene-status, update-scene-files, list-scenes, create-calendar-event, list-calendar-events, update-calendar-event, create-loop, advance-loop, record-metric, record-optimization, apply-optimization, measure-optimization, create-research, update-north-star, loop-status, metrics-summary");
       process.exit(1);
   }
 }

@@ -222,6 +222,173 @@ async function main() {
   }
   console.log("  Generated calendar event data for all months");
 
+  // ── Loops ──
+  const loops = await prisma.loopExecution.findMany({
+    include: {
+      phases: {
+        orderBy: { createdAt: "desc" },
+        take: 20,
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+  writeJSON("loops.json", loops);
+
+  for (const loop of loops) {
+    const fullLoop = await prisma.loopExecution.findUnique({
+      where: { id: loop.id },
+      include: {
+        phases: {
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    });
+    writeJSON(`loops/${loop.id}.json`, fullLoop);
+  }
+  console.log(`  Generated ${loops.length} loop data files`);
+
+  // ── Metrics ──
+  const metrics = await prisma.metricSnapshot.findMany({
+    orderBy: { recordedAt: "desc" },
+    take: 500,
+  });
+  writeJSON("metrics.json", metrics);
+  console.log(`  Generated metrics data (${metrics.length} snapshots)`);
+
+  // ── North Star ──
+  const allCampaigns = await prisma.campaign.findMany({
+    select: {
+      id: true,
+      name: true,
+      northStarTarget: true,
+      northStarActual: true,
+    },
+  });
+  const totalTarget = allCampaigns.reduce(
+    (s: number, c: { northStarTarget: number | null }) => s + (c.northStarTarget ?? 0),
+    0
+  );
+  const totalActual = allCampaigns.reduce(
+    (s: number, c: { northStarActual: number | null }) => s + (c.northStarActual ?? 0),
+    0
+  );
+  writeJSON("metrics/north-star.json", {
+    totalTarget,
+    totalActual,
+    campaigns: allCampaigns.filter(
+      (c: { northStarTarget: number | null }) => c.northStarTarget && c.northStarTarget > 0
+    ),
+    trend: [],
+  });
+  console.log("  Generated north star data");
+
+  // ── Optimizations ──
+  const optimizations = await prisma.optimizationDecision.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 50,
+  });
+  writeJSON("optimizations.json", optimizations);
+  console.log(`  Generated ${optimizations.length} optimization decisions`);
+
+  // ── Research artifacts ──
+  const researchArtifacts = await prisma.researchArtifact.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 50,
+  });
+  writeJSON("research.json", researchArtifacts);
+  console.log(`  Generated ${researchArtifacts.length} research artifacts`);
+
+  // ── Command Center aggregated data ──
+  const activeLoops = loops.filter((l: any) => l.status === "ACTIVE");
+  const channelPerformance: Record<string, any> = {};
+
+  const recentMetrics = await prisma.metricSnapshot.findMany({
+    where: {
+      recordedAt: { gte: new Date(Date.now() - 30 * 86400000) },
+    },
+  });
+
+  for (const snap of recentMetrics) {
+    if (!channelPerformance[snap.channel]) {
+      channelPerformance[snap.channel] = {
+        spend: 0,
+        impressions: 0,
+        clicks: 0,
+        conversions: 0,
+        cpa: 0,
+      };
+    }
+    const ch = channelPerformance[snap.channel];
+    switch (snap.metricType) {
+      case "spend":
+        ch.spend += snap.value;
+        break;
+      case "impressions":
+        ch.impressions += snap.value;
+        break;
+      case "clicks":
+        ch.clicks += snap.value;
+        break;
+      case "conversions":
+        ch.conversions += snap.value;
+        break;
+      case "cpa":
+        ch.cpa = snap.value;
+        break;
+    }
+  }
+
+  const assetStats = await prisma.asset.groupBy({
+    by: ["status"],
+    _count: true,
+  });
+  const statMap: Record<string, number> = {};
+  for (const s of assetStats) {
+    statMap[s.status] = s._count;
+  }
+
+  writeJSON("command-center.json", {
+    northStar: {
+      totalTarget,
+      totalActual,
+      campaigns: allCampaigns.filter(
+        (c: { northStarTarget: number | null }) => c.northStarTarget && c.northStarTarget > 0
+      ),
+      trend: [],
+    },
+    activeLoops: activeLoops.map((l: any) => ({
+      id: l.id,
+      loopType: l.loopType,
+      currentPhase: l.currentPhase,
+      cycleNumber: l.cycleNumber,
+      status: l.status,
+      campaignId: l.campaignId,
+      updatedAt: l.updatedAt,
+    })),
+    channelPerformance,
+    recentOptimizations: optimizations.slice(0, 10),
+    assetStats: {
+      total: Object.values(statMap).reduce((s: number, v: number) => s + v, 0),
+      inReview: statMap.IN_REVIEW ?? 0,
+      approved: statMap.APPROVED ?? 0,
+      published: statMap.PUBLISHED ?? 0,
+      live: statMap.LIVE ?? 0,
+    },
+  });
+  console.log("  Generated command center data");
+
+  // ── Google Ads connection (static empty response) ──
+  writeJSON("google-ads/connection.json", {
+    connected: false,
+    message: "Google Ads not available in deployed preview",
+  });
+
+  // ── Meta Ads connection (static empty response) ──
+  writeJSON("meta-ads/connection.json", {
+    connected: false,
+    message: "Meta Ads not available in deployed preview",
+  });
+
   // ── Social integrations (static empty response) ──
   writeJSON("social/integrations.json", {
     connected: false,

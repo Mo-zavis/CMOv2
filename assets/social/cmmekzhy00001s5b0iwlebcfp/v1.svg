@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <!-- Subtle geometric background pattern -->
+    <pattern id="geoPattern2" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <rect width="80" height="80" fill="none"/>
+      <circle cx="40" cy="40" r="35" fill="none" stroke="#006828" stroke-width="0.4" opacity="0.08"/>
+      <rect x="15" y="15" width="50" height="50" fill="none" stroke="#006828" stroke-width="0.3" opacity="0.06" transform="rotate(45, 40, 40)"/>
+    </pattern>
+    <!-- Icon circle background -->
+    <linearGradient id="iconBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#006828;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#005020;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1350" fill="#f8f8f6"/>
+  <rect width="1080" height="1350" fill="url(#geoPattern2)"/>
+
+  <!-- Green header band -->
+  <rect x="0" y="0" width="1080" height="280" fill="#006828"/>
+
+  <!-- Header decorative arches -->
+  <g opacity="0.15">
+    <path d="M0,280 Q67.5,240 135,280 Q202.5,240 270,280 Q337.5,240 405,280 Q472.5,240 540,280 Q607.5,240 675,280 Q742.5,240 810,280 Q877.5,240 945,280 Q1012.5,240 1080,280" fill="none" stroke="#f8f8f6" stroke-width="2"/>
+  </g>
+
+  <!-- Crescent moon accent in header -->
+  <g transform="translate(920, 80)" opacity="0.2">
+    <path d="M0,-40 A40,40 0 1,1 0,40 A30,30 0 1,0 0,-40" fill="#f8f8f6"/>
+  </g>
+
+  <!-- Header text -->
+  <text x="80" y="100" font-family="'Geist', sans-serif" font-size="22" fill="#f8f8f6" opacity="0.7" letter-spacing="4">RAMADAN HEALTH SERIES</text>
+  <text x="80" y="170" font-family="'Bricolage Grotesque', sans-serif" font-size="68" font-weight="700" fill="#f8f8f6" letter-spacing="-1">5 Ways to Support</text>
+  <text x="80" y="245" font-family="'Bricolage Grotesque', sans-serif" font-size="68" font-weight="700" fill="#f8f8f6" letter-spacing="-1">Fasting Patients</text>
+
+  <!-- Items list -->
+  <!-- Item 1 -->
+  <g transform="translate(80, 340)">
+    <circle cx="45" cy="45" r="45" fill="url(#iconBg)"/>
+    <text x="45" y="58" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="36" font-weight="700" fill="#f8f8f6">1</text>
+    <!-- Clock icon suggestion -->
+    <circle cx="45" cy="45" r="28" fill="none" stroke="#f8f8f6" stroke-width="1.5" opacity="0.3"/>
+    <rect x="120" y="8" width="780" height="1" fill="#ecebe8"/>
+    <text x="120" y="35" font-family="'Bricolage Grotesque', sans-serif" font-size="34" font-weight="600" fill="#1c1c1c">Flexible Appointment Scheduling</text>
+    <text x="120" y="72" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">Offer pre-dawn and post-sunset time slots</text>
+    <text x="120" y="100" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">to accommodate fasting schedules.</text>
+  </g>
+
+  <!-- Item 2 -->
+  <g transform="translate(80, 510)">
+    <circle cx="45" cy="45" r="45" fill="url(#iconBg)"/>
+    <text x="45" y="58" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="36" font-weight="700" fill="#f8f8f6">2</text>
+    <rect x="120" y="8" width="780" height="1" fill="#ecebe8"/>
+    <text x="120" y="35" font-family="'Bricolage Grotesque', sans-serif" font-size="34" font-weight="600" fill="#1c1c1c">Medication Timing Guidance</text>
+    <text x="120" y="72" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">Help patients adjust medication schedules</text>
+    <text x="120" y="100" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">around Suhoor and Iftar safely.</text>
+  </g>
+
+  <!-- Item 3 -->
+  <g transform="translate(80, 680)">
+    <circle cx="45" cy="45" r="45" fill="url(#iconBg)"/>
+    <text x="45" y="58" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="36" font-weight="700" fill="#f8f8f6">3</text>
+    <rect x="120" y="8" width="780" height="1" fill="#ecebe8"/>
+    <text x="120" y="35" font-family="'Bricolage Grotesque', sans-serif" font-size="34" font-weight="600" fill="#1c1c1c">Culturally Aware Communication</text>
+    <text x="120" y="72" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">Send automated reminders that respect</text>
+    <text x="120" y="100" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">fasting hours and cultural sensitivities.</text>
+  </g>
+
+  <!-- Item 4 -->
+  <g transform="translate(80, 850)">
+    <circle cx="45" cy="45" r="45" fill="url(#iconBg)"/>
+    <text x="45" y="58" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="36" font-weight="700" fill="#f8f8f6">4</text>
+    <rect x="120" y="8" width="780" height="1" fill="#ecebe8"/>
+    <text x="120" y="35" font-family="'Bricolage Grotesque', sans-serif" font-size="34" font-weight="600" fill="#1c1c1c">Hydration and Nutrition Support</text>
+    <text x="120" y="72" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">Provide personalized health tips for</text>
+    <text x="120" y="100" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">maintaining wellness during the fast.</text>
+  </g>
+
+  <!-- Item 5 -->
+  <g transform="translate(80, 1020)">
+    <circle cx="45" cy="45" r="45" fill="url(#iconBg)"/>
+    <text x="45" y="58" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="36" font-weight="700" fill="#f8f8f6">5</text>
+    <rect x="120" y="8" width="780" height="1" fill="#ecebe8"/>
+    <text x="120" y="35" font-family="'Bricolage Grotesque', sans-serif" font-size="34" font-weight="600" fill="#1c1c1c">Telehealth and Virtual Check-ins</text>
+    <text x="120" y="72" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">Offer virtual consultations to reduce</text>
+    <text x="120" y="100" font-family="'Geist', sans-serif" font-size="24" fill="#1c1c1c" opacity="0.6">travel burden during fasting hours.</text>
+  </g>
+
+  <!-- Bottom CTA bar -->
+  <rect x="60" y="1170" width="960" height="60" rx="30" fill="#ecebe8"/>
+  <text x="540" y="1210" text-anchor="middle" font-family="'Geist', sans-serif" font-size="24" fill="#006828" font-weight="600" letter-spacing="1">Powered by Zavis Patient Engagement</text>
+
+  <!-- Zavis branding footer -->
+  <rect x="0" y="1250" width="1080" height="100" fill="#006828"/>
+  <text x="540" y="1310" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="38" font-weight="700" fill="#f8f8f6" letter-spacing="6">ZAVIS</text>
+  <text x="540" y="1338" text-anchor="middle" font-family="'Geist', sans-serif" font-size="14" fill="#f8f8f6" opacity="0.7" letter-spacing="3">AI-POWERED PATIENT ENGAGEMENT</text>
+</svg>
