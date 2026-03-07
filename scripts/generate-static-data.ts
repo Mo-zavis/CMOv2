@@ -246,6 +246,38 @@ async function main() {
   }
   console.log("  Generated calendar event data for all months");
 
+  // ── Research briefs ──
+  const researchBriefs = await prisma.researchBrief.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  writeJSON("research-briefs.json", researchBriefs);
+  console.log(`  Generated ${researchBriefs.length} research brief data files`);
+
+  // ── Standups ──
+  const standups = await prisma.standupSession.findMany({
+    include: { items: { orderBy: { createdAt: "asc" } } },
+    orderBy: { sessionDate: "desc" },
+  });
+  writeJSON("standups.json", standups);
+  for (const s of standups) {
+    writeJSON(`standups/${s.id}.json`, s);
+  }
+  console.log(`  Generated ${standups.length} standup data files`);
+
+  // ── Progress logs ──
+  const progressLogs = await prisma.progressLog.findMany({
+    orderBy: { sessionDate: "desc" },
+  });
+  writeJSON("progress.json", progressLogs);
+  console.log(`  Generated ${progressLogs.length} progress log data files`);
+
+  // ── Event opportunities ──
+  const events_opp = await prisma.eventOpportunity.findMany({
+    orderBy: { startDate: "asc" },
+  });
+  writeJSON("event-opportunities.json", events_opp);
+  console.log(`  Generated ${events_opp.length} event opportunity data files`);
+
   // ── Social integrations (static empty response) ──
   writeJSON("social/integrations.json", {
     connected: false,
