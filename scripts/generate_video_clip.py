@@ -32,37 +32,43 @@ try:
 except ImportError:
     USE_REQUESTS = False
 
-DEFAULT_MODEL = "veo-3.0-generate-preview"
+DEFAULT_MODEL = "veo-3.0-generate-001"
 MAX_RETRIES = 3
 RETRY_DELAY = 10  # Veo generation takes longer
+POLL_INTERVAL = 10  # seconds between polling for async generation
 
 
 def generate_with_sdk(prompt, model, start_frame=None, duration=5, aspect_ratio="9:16"):
-    """Generate video clip using the Google GenAI SDK."""
+    """Generate video clip using the Google GenAI SDK (async video generation)."""
     client = genai.Client()
 
-    contents = []
+    # Build the image for start frame if provided
+    image_param = None
     if start_frame and os.path.exists(start_frame):
         from PIL import Image as PILImage
-        img = PILImage.open(start_frame)
-        contents.append(img)
-    contents.append(prompt)
+        image_param = PILImage.open(start_frame)
 
-    config = types.GenerateContentConfig(
-        response_modalities=["VIDEO"],
-        video_config=types.VideoConfig(
-            aspect_ratio=aspect_ratio,
-            duration_seconds=duration,
-        ),
+    config = types.GenerateVideosConfig(
+        aspect_ratio=aspect_ratio,
+        number_of_videos=1,
     )
 
-    response = client.models.generate_content(
+    # Use the dedicated video generation endpoint
+    operation = client.models.generate_videos(
         model=model,
-        contents=contents,
+        prompt=prompt,
+        image=image_param,
         config=config,
     )
 
-    return response
+    # Poll until complete
+    print("  Waiting for video generation (this may take 1-3 minutes)...", file=sys.stderr)
+    while not operation.done:
+        time.sleep(POLL_INTERVAL)
+        print(f"  Still generating...", file=sys.stderr)
+        operation = client.operations.get(operation)
+
+    return operation.result
 
 
 def generate_with_rest(prompt, model, start_frame=None, duration=5, aspect_ratio="9:16"):
@@ -104,18 +110,44 @@ def generate_with_rest(prompt, model, start_frame=None, duration=5, aspect_ratio
     return response.json()
 
 
-def save_video_sdk(response, output_path):
-    """Extract and save video from SDK response."""
+def save_video_sdk(result, output_path):
+    """Extract and save video from SDK GenerateVideosResponse."""
     os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
 
-    for part in response.candidates[0].content.parts:
-        if part.inline_data and part.inline_data.mime_type.startswith("video/"):
-            video_data = part.inline_data.data
-            if isinstance(video_data, str):
-                video_data = base64.b64decode(video_data)
+    if not result or not result.generated_videos:
+        print("ERROR: No videos in response.", file=sys.stderr)
+        return False
+
+    video = result.generated_videos[0]
+    if video.video and video.video.uri:
+        # Download from URI — must include API key for authenticated download
+        api_key = os.environ.get("GEMINI_API_KEY", "")
+        download_url = video.video.uri
+        if "?" in download_url:
+            download_url += f"&key={api_key}"
+        else:
+            download_url += f"?key={api_key}"
+
+        if USE_REQUESTS:
+            r = requests.get(download_url, timeout=120)
+            r.raise_for_status()
             with open(output_path, "wb") as f:
-                f.write(video_data)
-            return True
+                f.write(r.content)
+        else:
+            import urllib.request
+            import ssl
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            urllib.request.urlretrieve(download_url, output_path, context=ctx)
+        return True
+    elif video.video and video.video.video_bytes:
+        video_data = video.video.video_bytes
+        if isinstance(video_data, str):
+            video_data = base64.b64decode(video_data)
+        with open(output_path, "wb") as f:
+            f.write(video_data)
+        return True
     return False
 
 

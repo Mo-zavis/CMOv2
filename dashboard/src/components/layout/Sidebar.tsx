@@ -45,6 +45,7 @@ const NAV_ITEMS = [
     items: [
       { label: "Ecosystem", href: "/ecosystem", icon: "network" },
       { label: "Skill Map", href: "/skills", icon: "sparkles" },
+      { label: "Status", href: "/status", icon: "clipboard-check" },
     ],
   },
 ];
@@ -123,6 +124,13 @@ const ICONS: Record<string, React.ReactNode> = {
   sparkles: (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+    </svg>
+  ),
+  "clipboard-check": (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      <path d="m9 14 2 2 4-4" />
     </svg>
   ),
 };

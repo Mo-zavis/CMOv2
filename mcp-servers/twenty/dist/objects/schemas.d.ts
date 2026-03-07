@@ -1,0 +1,13 @@
+import { z } from 'zod';
+export declare const filterSchema: z.ZodOptional<z.ZodString>;
+export declare const requiredFilterSchema: z.ZodString;
+export declare const orderBySchema: z.ZodOptional<z.ZodString>;
+export declare const limitSchema: z.ZodOptional<z.ZodNumber>;
+export declare const depthSchema: z.ZodOptional<z.ZodNumber>;
+export declare const startingAfterSchema: z.ZodOptional<z.ZodString>;
+export declare const endingBeforeSchema: z.ZodOptional<z.ZodString>;
+export declare const idSchema: z.ZodString;
+export declare const upsertSchema: z.ZodOptional<z.ZodBoolean>;
+export declare const softDeleteSchema: z.ZodOptional<z.ZodBoolean>;
+export declare const dataSchema: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+export declare const batchDataSchema: z.ZodArray<z.ZodRecord<z.ZodString, z.ZodUnknown>, "many">;

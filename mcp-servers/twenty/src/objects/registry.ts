@@ -1,0 +1,80 @@
+export interface TwentyObject {
+  singular: string;
+  plural: string;
+  category: 'core_crm' | 'productivity' | 'messaging' | 'calendar' | 'automation' | 'system';
+  description: string;
+}
+
+export const TWENTY_OBJECTS: TwentyObject[] = [
+  // Core CRM
+  { singular: 'person', plural: 'people', category: 'core_crm',
+    description: 'Contact records with name, emails, phones, job title, city, LinkedIn, company association' },
+  { singular: 'company', plural: 'companies', category: 'core_crm',
+    description: 'Organization records with domain, employees, revenue, address, LinkedIn, account owner' },
+  { singular: 'opportunity', plural: 'opportunities', category: 'core_crm',
+    description: 'Deal/pipeline records with amount, stage, close date, company and contact links' },
+
+  // Productivity
+  { singular: 'note', plural: 'notes', category: 'productivity',
+    description: 'Rich text notes linked to people, companies, or opportunities via noteTargets' },
+  { singular: 'noteTarget', plural: 'noteTargets', category: 'productivity',
+    description: 'Junction records linking notes to people, companies, or opportunities' },
+  { singular: 'task', plural: 'tasks', category: 'productivity',
+    description: 'To-do items with title, body, due date, status, and assignee' },
+  { singular: 'taskTarget', plural: 'taskTargets', category: 'productivity',
+    description: 'Junction records linking tasks to people, companies, or opportunities' },
+
+  // Messaging
+  { singular: 'message', plural: 'messages', category: 'messaging',
+    description: 'Email messages with subject, text, headers, and thread association' },
+  { singular: 'messageThread', plural: 'messageThreads', category: 'messaging',
+    description: 'Grouping container for related email messages' },
+  { singular: 'messageParticipant', plural: 'messageParticipants', category: 'messaging',
+    description: 'To/from/cc/bcc participants on messages' },
+  { singular: 'messageChannel', plural: 'messageChannels', category: 'messaging',
+    description: 'Email channel configuration for connected accounts' },
+  { singular: 'messageChannelMessageAssociation', plural: 'messageChannelMessageAssociations', category: 'messaging',
+    description: 'Links messages to message channels' },
+  { singular: 'messageFolder', plural: 'messageFolders', category: 'messaging',
+    description: 'Mail folder structure (inbox, sent, etc.)' },
+  { singular: 'messageChannelMessageAssociationMessageFolder', plural: 'messageChannelMessageAssociationMessageFolders', category: 'messaging',
+    description: 'Links message channel associations to mail folders' },
+
+  // Calendar
+  { singular: 'calendarEvent', plural: 'calendarEvents', category: 'calendar',
+    description: 'Calendar events with title, start/end times, location, description, conference link' },
+  { singular: 'calendarEventParticipant', plural: 'calendarEventParticipants', category: 'calendar',
+    description: 'Attendees/participants on calendar events' },
+  { singular: 'calendarChannel', plural: 'calendarChannels', category: 'calendar',
+    description: 'Calendar channel configuration for connected accounts' },
+  { singular: 'calendarChannelEventAssociation', plural: 'calendarChannelEventAssociations', category: 'calendar',
+    description: 'Links calendar events to calendar channels' },
+
+  // Automation
+  { singular: 'workflow', plural: 'workflows', category: 'automation',
+    description: 'Automation workflows with name and status (DRAFT/ACTIVE/DEACTIVATED)' },
+  { singular: 'workflowVersion', plural: 'workflowVersions', category: 'automation',
+    description: 'Versioned snapshots of workflow definitions' },
+  { singular: 'workflowRun', plural: 'workflowRuns', category: 'automation',
+    description: 'Execution records for workflow runs' },
+  { singular: 'workflowAutomatedTrigger', plural: 'workflowAutomatedTriggers', category: 'automation',
+    description: 'Trigger configurations for automated workflows' },
+
+  // System
+  { singular: 'attachment', plural: 'attachments', category: 'system',
+    description: 'File attachments linked to tasks, notes, people, companies, opportunities, dashboards, or workflows' },
+  { singular: 'favorite', plural: 'favorites', category: 'system',
+    description: 'Bookmarked/favorited records for quick access' },
+  { singular: 'favoriteFolder', plural: 'favoriteFolders', category: 'system',
+    description: 'Organizational folders for grouped favorites' },
+  { singular: 'timelineActivity', plural: 'timelineActivities', category: 'system',
+    description: 'Activity feed entries for record timelines' },
+  { singular: 'connectedAccount', plural: 'connectedAccounts', category: 'system',
+    description: 'External email/calendar account connections' },
+  { singular: 'blocklist', plural: 'blocklists', category: 'system',
+    description: 'Blocked email addresses/domains' },
+  { singular: 'dashboard', plural: 'dashboards', category: 'system',
+    description: 'Custom dashboard layouts and configurations' },
+  { singular: 'workspaceMember', plural: 'workspaceMembers', category: 'system',
+    description: 'Users/members within the workspace' },
+];
