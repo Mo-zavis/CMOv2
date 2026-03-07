@@ -37,3 +37,4 @@ npm-debug.log*
 # Misc
 *.tgz
 docker/postiz.env
+.vercel
