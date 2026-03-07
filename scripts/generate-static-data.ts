@@ -246,6 +246,64 @@ async function main() {
   }
   console.log("  Generated calendar event data for all months");
 
+  // ── Loops ──
+  const loops = await prisma.loopExecution.findMany({
+    include: { phases: { orderBy: { createdAt: "desc" } } },
+    orderBy: { updatedAt: "desc" },
+  });
+  writeJSON("loops.json", loops);
+  for (const loop of loops) {
+    writeJSON(`loops/${loop.id}.json`, loop);
+  }
+  console.log(`  Generated ${loops.length} loop data files`);
+
+  // ── Metrics ──
+  const metrics = await prisma.metricSnapshot.findMany({
+    orderBy: { recordedAt: "desc" },
+    take: 100,
+  });
+  writeJSON("metrics.json", metrics);
+
+  // North star metrics
+  const northStarCampaigns = await prisma.campaign.findMany({
+    where: { northStarTarget: { not: null } },
+    select: {
+      id: true, name: true, northStarTarget: true, northStarActual: true, status: true,
+    },
+  });
+  writeJSON("metrics/north-star.json", northStarCampaigns);
+  console.log(`  Generated metrics data`);
+
+  // ── Optimizations ──
+  const optimizations = await prisma.optimizationDecision.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  writeJSON("optimizations.json", optimizations);
+  console.log(`  Generated ${optimizations.length} optimization data files`);
+
+  // ── Research artifacts ──
+  const research = await prisma.researchArtifact.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  writeJSON("research.json", research);
+  console.log(`  Generated ${research.length} research artifact data files`);
+
+  // ── Command center (aggregated view) ──
+  const activeLoops = loops.filter((l: { status: string }) => l.status === "ACTIVE");
+  const recentMetrics = metrics.slice(0, 20);
+  const pendingOptimizations = optimizations.filter((o: { status: string }) => o.status === "PROPOSED");
+  writeJSON("command-center.json", {
+    activeLoops,
+    recentMetrics,
+    pendingOptimizations,
+    campaigns: northStarCampaigns,
+  });
+  console.log(`  Generated command center data`);
+
+  // ── Connection status (static) ──
+  writeJSON("google-ads/connection.json", { connected: false, error: "Not configured in deployed preview" });
+  writeJSON("meta-ads/connection.json", { connected: false, error: "Not configured in deployed preview" });
+
   // ── Research briefs ──
   const researchBriefs = await prisma.researchBrief.findMany({
     orderBy: { createdAt: "desc" },
