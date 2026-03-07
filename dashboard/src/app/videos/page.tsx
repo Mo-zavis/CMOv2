@@ -13,22 +13,23 @@ export default async function VideosPage() {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h2 className="font-heading font-semibold text-base">
+        <h2 className="font-heading text-2xl font-bold">
           Videos ({assets.length})
         </h2>
       </div>
 
       {assets.length === 0 ? (
-        <Card className="p-12 text-center">
+        <Card className="p-16 text-center">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-muted-foreground/40"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
           <p className="text-muted-foreground text-sm">
             No videos created yet. Use the video producer skill to create
             storyboard-driven video content.
           </p>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {assets.map((asset) => {
             const latestVersion = asset.versions[0];
             const sceneCount = asset.scenes.length;

@@ -154,19 +154,20 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
   return (
     <aside
-      className={`w-56 h-screen bg-white border-r border-border flex flex-col fixed left-0 top-0 z-50 transition-transform duration-200 ${
+      className={`w-56 h-screen bg-white flex flex-col fixed left-0 top-0 z-50 transition-transform duration-200 ${
         open ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0`}
+      style={{ borderRight: "1px solid #ecebe8" }}
     >
       {/* Logo */}
-      <div className="h-14 flex items-center justify-between px-4 border-b border-border">
-        <span className="font-heading text-lg font-semibold tracking-tight">
+      <div className="h-16 flex items-center justify-between px-5" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+        <span className="font-heading text-xl font-semibold tracking-tight">
           <span className="text-[#006828]">Zavis</span>{" "}
-          <span className="text-muted-foreground font-normal text-sm">CMO</span>
+          <span className="text-[#1c1c1c]/50 font-normal text-sm">CMO</span>
         </span>
         <button
           onClick={onClose}
-          className="lg:hidden p-1 rounded hover:bg-muted text-muted-foreground"
+          className="lg:hidden p-1.5 rounded-md hover:bg-[#f8f8f6] text-[#1c1c1c]/50 transition-colors"
           aria-label="Close menu"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -176,10 +177,17 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2">
-        {NAV_ITEMS.map((section) => (
-          <div key={section.section} className="mb-4">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium px-2 mb-1">
+      <nav className="flex-1 overflow-y-auto py-4 px-3">
+        {NAV_ITEMS.map((section, sectionIndex) => (
+          <div
+            key={section.section}
+            className={`${
+              sectionIndex < NAV_ITEMS.length - 1
+                ? "pb-3 mb-3 border-b border-[#ecebe8]"
+                : ""
+            }`}
+          >
+            <p className="text-[11px] uppercase tracking-wider text-[#1c1c1c]/40 font-semibold px-3 mb-2">
               {section.section}
             </p>
             {section.items.map((item) => {
@@ -193,13 +201,15 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                   key={item.href}
                   href={item.href}
                   onClick={onClose}
-                  className={`flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors ${
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${
                     isActive
-                      ? "bg-[#006828]/10 text-[#006828] font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      ? "bg-[#006828]/10 text-[#006828] font-medium border-l-2 border-[#006828]"
+                      : "text-[#1c1c1c]/60 hover:text-[#1c1c1c] hover:bg-[#f8f8f6]"
                   }`}
                 >
-                  {ICONS[item.icon]}
+                  <span className={isActive ? "text-[#006828]" : ""}>
+                    {ICONS[item.icon]}
+                  </span>
                   {item.label}
                 </Link>
               );
@@ -209,9 +219,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="p-3 border-t border-border">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <div className="w-2 h-2 rounded-full bg-green-500" />
+      <div className="px-4 py-3.5 border-t border-[#ecebe8]">
+        <div className="flex items-center gap-2.5 text-xs text-[#1c1c1c]/50">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#006828] opacity-60"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#006828]"></span>
+          </span>
           Runtime Connected
         </div>
       </div>

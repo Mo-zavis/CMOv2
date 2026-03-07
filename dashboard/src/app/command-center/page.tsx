@@ -110,10 +110,10 @@ export default function CommandCenterPage() {
   const progressPct = ns.totalTarget > 0 ? Math.min(100, (ns.totalActual / ns.totalTarget) * 100) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
-        <h2 className="font-heading font-semibold text-base">Command Center</h2>
+        <h2 className="font-heading text-2xl font-bold">Command Center</h2>
         <p className="text-sm text-muted-foreground mt-0.5">
           North star metrics, active loops, and optimization decisions
         </p>
@@ -202,7 +202,8 @@ export default function CommandCenterPage() {
       <div>
         <h3 className="font-heading font-medium text-sm mb-3">Active Loops ({loops.length})</h3>
         {loops.length === 0 ? (
-          <Card className="p-8 text-center">
+          <Card className="p-16 text-center">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-muted-foreground/40"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             <p className="text-sm text-muted-foreground">
               No active loops. Start an agentic loop by running a pipeline script.
             </p>
@@ -211,7 +212,7 @@ export default function CommandCenterPage() {
             </p>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {loops.map((loop) => (
               <Card key={loop.id} className="p-4 space-y-3">
                 <div className="flex items-center justify-between">
@@ -242,7 +243,7 @@ export default function CommandCenterPage() {
       {Object.keys(channels).length > 0 && (
         <div>
           <h3 className="font-heading font-medium text-sm mb-3">Channel Performance (Last 30 Days)</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {Object.entries(channels).map(([channel, perf]) => (
               <Card key={channel} className="p-0 overflow-hidden">
                 <div className="px-3 py-2 bg-muted/30 border-b border-border">

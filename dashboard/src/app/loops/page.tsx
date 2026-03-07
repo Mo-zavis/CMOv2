@@ -72,10 +72,10 @@ export default function LoopsPage() {
   const completedLoops = loops.filter((l) => l.status !== "ACTIVE");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-heading font-semibold text-base">Agentic Loops ({loops.length})</h2>
+          <h2 className="font-heading text-2xl font-bold">Agentic Loops ({loops.length})</h2>
           <p className="text-sm text-muted-foreground mt-0.5">
             Cyclic marketing automation workflows
           </p>
@@ -83,7 +83,8 @@ export default function LoopsPage() {
       </div>
 
       {loops.length === 0 ? (
-        <Card className="p-12 text-center">
+        <Card className="p-16 text-center">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-muted-foreground/40"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
           <p className="text-sm text-muted-foreground">
             No loops running. Start an agentic loop with the pipeline runner.
           </p>

@@ -21,7 +21,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
       <div className="lg:pl-56">
         <TopBar onMenuClick={() => setSidebarOpen(true)} />
-        <main className="p-4 sm:p-6">{children}</main>
+        <main className="p-6 sm:p-8">
+          <div className="max-w-7xl mx-auto">{children}</div>
+        </main>
       </div>
     </div>
   );

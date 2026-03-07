@@ -54,10 +54,10 @@ export default function SocialPage() {
   const unconnectedSecondary = SECONDARY_PLATFORMS.filter((p) => !connectedIds.has(p.id));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-heading font-semibold text-base">Socials Connected</h2>
+        <h2 className="font-heading text-2xl font-bold">Socials Connected</h2>
         <a
           href={POSTIZ_URL}
           target="_blank"
@@ -99,7 +99,7 @@ export default function SocialPage() {
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
                 Connected Accounts ({data.integrations.length})
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {data.integrations.map((integration) => {
                   const meta = getPlatformMeta(integration.identifier);
                   return (
@@ -167,7 +167,7 @@ export default function SocialPage() {
               <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
                 Not Connected
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {unconnectedPrimary.map((platform) => (
                   <Card
                     key={platform.id}
@@ -240,7 +240,8 @@ export default function SocialPage() {
 
           {/* Empty state */}
           {data.integrations.length === 0 && (
-            <Card className="p-12 text-center">
+            <Card className="p-16 text-center">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-muted-foreground/40"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
               <p className="text-sm text-muted-foreground mb-3">
                 No social accounts connected yet.
               </p>

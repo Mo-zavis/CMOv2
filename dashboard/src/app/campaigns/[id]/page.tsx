@@ -413,17 +413,22 @@ export default function CampaignDetailPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* ===== Header (always visible) ===== */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="font-heading font-semibold text-lg">
+          <h2 className="font-heading text-2xl font-bold text-[#1c1c1c]">
             {campaign.name}
           </h2>
+          {campaign.objective && (
+            <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+              {campaign.objective}
+            </p>
+          )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {campaign.pillar && (
-            <span className="text-xs uppercase tracking-wider bg-[#006828]/10 text-[#006828] px-2 py-1 rounded">
+            <span className="text-[10px] uppercase tracking-wider bg-[#006828]/10 text-[#006828] px-2.5 py-1 rounded-full font-medium">
               {campaign.pillar.replace(/_/g, " ")}
             </span>
           )}
@@ -432,17 +437,17 @@ export default function CampaignDetailPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <p className="text-xs text-muted-foreground uppercase tracking-wide">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+        <Card className="p-5 border-[#ecebe8]">
+          <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">
             Budget
           </p>
-          <p className="text-xl font-heading font-semibold mt-1">
+          <p className="text-xl font-heading font-bold text-[#1c1c1c] mt-1.5">
             {campaign.budget ? `$${campaign.budget.toLocaleString()}` : "---"}
           </p>
         </Card>
-        <Card className="p-4">
-          <p className="text-xs text-muted-foreground uppercase tracking-wide">
+        <Card className="p-5 border-[#ecebe8]">
+          <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">
             Timeline
           </p>
           <p className="text-sm font-medium mt-1">

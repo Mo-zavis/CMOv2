@@ -86,10 +86,10 @@ export default function StandupsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="font-heading text-2xl font-semibold text-[#1c1c1c]">
+        <h1 className="font-heading text-2xl font-bold text-[#1c1c1c]">
           Standups
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -108,7 +108,8 @@ export default function StandupsPage() {
 
       {/* Empty state */}
       {!loading && sessions.length === 0 && (
-        <Card className="p-8 text-center">
+        <Card className="p-16 text-center">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-muted-foreground/40"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           <p className="text-muted-foreground text-sm">
             No standup sessions yet. The CMO will create daily standups to align
             on priorities, surface blockers, and request permissions.

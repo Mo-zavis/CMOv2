@@ -28,6 +28,25 @@ function getModelName(metadata: string | null | undefined): string | null {
   }
 }
 
+function getTypeBorderColor(type: string): string {
+  switch (type) {
+    case "image":
+      return "border-t-[#006828]";
+    case "copy":
+      return "border-t-blue-500";
+    case "video":
+      return "border-t-purple-500";
+    case "ad_creative":
+      return "border-t-orange-500";
+    case "social_post":
+      return "border-t-pink-500";
+    case "email":
+      return "border-t-yellow-500";
+    default:
+      return "border-t-gray-300";
+  }
+}
+
 const TYPE_ROUTES: Record<string, string> = {
   image: "/images",
   copy: "/content",
@@ -54,30 +73,34 @@ export function AssetCard({
 
   return (
     <Link href={`${route}/${id}`}>
-      <Card className="p-0 overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
+      <Card
+        className={`p-0 overflow-hidden hover:shadow-lg hover:border-[#006828]/15 transition-all duration-200 cursor-pointer group border-t-[3px] ${getTypeBorderColor(type)}`}
+      >
         {/* Thumbnail area */}
-        <div className="h-40 bg-muted flex items-center justify-center overflow-hidden">
+        <div className="h-44 bg-muted flex items-center justify-center overflow-hidden">
           {type === "image" && latestFilePath ? (
             <img
               src={`/api/files/${latestFilePath}`}
               alt={title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : type === "copy" && latestContent ? (
-            <div className="p-3 text-xs text-muted-foreground line-clamp-6 leading-relaxed">
+            <div className="p-4 text-xs text-muted-foreground line-clamp-6 leading-relaxed">
               {latestContent.slice(0, 300)}
             </div>
           ) : (
             <div className="text-muted-foreground text-xs uppercase tracking-wide">
-              {type}
+              {type.replace(/_/g, " ")}
             </div>
           )}
         </div>
 
         {/* Info */}
-        <div className="p-3 space-y-2">
+        <div className="p-4 space-y-2.5">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="text-sm font-medium line-clamp-1">{title}</h3>
+            <h3 className="text-sm font-semibold line-clamp-1 text-[#1c1c1c]">
+              {title}
+            </h3>
             <StatusBadge status={status} />
           </div>
           {modelName && (
@@ -88,9 +111,15 @@ export function AssetCard({
               <span className="truncate">{modelName}</span>
             </div>
           )}
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center text-xs text-muted-foreground">
             <span>v{currentVersion}</span>
-            {platform && <span className="capitalize">{platform}</span>}
+            {platform && (
+              <>
+                <span className="mx-1.5 text-[#ecebe8]">&middot;</span>
+                <span className="capitalize">{platform}</span>
+              </>
+            )}
+            <span className="mx-1.5 text-[#ecebe8]">&middot;</span>
             <span>
               {new Date(updatedAt).toLocaleDateString("en-US", {
                 month: "short",
