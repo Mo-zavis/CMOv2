@@ -851,9 +851,261 @@ async function main() {
       break;
     }
 
+    // === RESEARCH BRIEF COMMANDS ===
+
+    case "create-research-brief": {
+      const briefType = getFlag("briefType");
+      const question = getFlag("question");
+      const campaignId = getFlag("campaignId");
+      const loopExecutionId = getFlag("loopId");
+      const context = getFlag("context");
+
+      if (!briefType || !question) {
+        console.error("Required: --briefType --question");
+        process.exit(1);
+      }
+
+      let project = await prisma.project.findFirst({ where: { name: "Zavis" } });
+      if (!project) {
+        project = await prisma.project.create({ data: { name: "Zavis" } });
+      }
+
+      const brief = await prisma.researchBrief.create({
+        data: {
+          projectId: project.id,
+          campaignId: campaignId ?? null,
+          loopExecutionId: loopExecutionId ?? null,
+          briefType,
+          question,
+          context: context ?? null,
+          status: "PENDING",
+        },
+      });
+
+      console.log(JSON.stringify({ id: brief.id, message: "Research brief created" }));
+      break;
+    }
+
+    case "update-research-brief": {
+      const briefId = getFlag("briefId");
+      const status = getFlag("status");
+      const findings = getFlag("findings");
+      const confidence = getFlag("confidence");
+      const sources = getFlag("sources");
+
+      if (!briefId) {
+        console.error("Required: --briefId");
+        process.exit(1);
+      }
+
+      const updateData: Record<string, unknown> = {};
+      if (status) updateData.status = status;
+      if (findings) updateData.findings = findings;
+      if (confidence) updateData.confidence = parseFloat(confidence);
+      if (sources) updateData.sources = sources;
+
+      await prisma.researchBrief.update({
+        where: { id: briefId },
+        data: updateData,
+      });
+
+      console.log(JSON.stringify({ briefId, message: "Research brief updated" }));
+      break;
+    }
+
+    case "list-research-briefs": {
+      const campaignId = getFlag("campaignId");
+      const status = getFlag("status");
+      const briefType = getFlag("briefType");
+
+      const where: Record<string, unknown> = {};
+      if (campaignId) where.campaignId = campaignId;
+      if (status) where.status = status;
+      if (briefType) where.briefType = briefType;
+
+      const briefs = await prisma.researchBrief.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+      });
+
+      console.log(JSON.stringify(briefs, null, 2));
+      break;
+    }
+
+    // === STANDUP COMMANDS ===
+
+    case "create-standup": {
+      let project = await prisma.project.findFirst({ where: { name: "Zavis" } });
+      if (!project) {
+        project = await prisma.project.create({ data: { name: "Zavis" } });
+      }
+
+      const standup = await prisma.standupSession.create({
+        data: {
+          projectId: project.id,
+          status: "ACTIVE",
+        },
+      });
+
+      console.log(JSON.stringify({ id: standup.id, message: "Standup session created" }));
+      break;
+    }
+
+    case "add-standup-item": {
+      const standupId = getFlag("standupId");
+      const category = getFlag("category");
+      const content = getFlag("content");
+      const priority = getFlag("priority");
+      const context = getFlag("context");
+
+      if (!standupId || !category || !content) {
+        console.error("Required: --standupId --category --content");
+        process.exit(1);
+      }
+
+      const item = await prisma.standupItem.create({
+        data: {
+          standupId,
+          category,
+          content,
+          priority: priority ?? "NORMAL",
+          context: context ?? null,
+        },
+      });
+
+      console.log(JSON.stringify({ id: item.id, message: "Standup item added" }));
+      break;
+    }
+
+    case "respond-standup-item": {
+      const itemId = getFlag("itemId");
+      const response = getFlag("response");
+
+      if (!itemId || !response) {
+        console.error("Required: --itemId --response");
+        process.exit(1);
+      }
+
+      await prisma.standupItem.update({
+        where: { id: itemId },
+        data: {
+          response,
+          resolved: true,
+          resolvedAt: new Date(),
+        },
+      });
+
+      console.log(JSON.stringify({ itemId, message: "Standup item responded" }));
+      break;
+    }
+
+    case "complete-standup": {
+      const standupId = getFlag("standupId");
+      const summary = getFlag("summary");
+
+      if (!standupId) {
+        console.error("Required: --standupId");
+        process.exit(1);
+      }
+
+      await prisma.standupSession.update({
+        where: { id: standupId },
+        data: {
+          status: "COMPLETED",
+          summary: summary ?? null,
+        },
+      });
+
+      console.log(JSON.stringify({ standupId, message: "Standup completed" }));
+      break;
+    }
+
+    case "list-standups": {
+      const status = getFlag("status");
+      const limit = getFlag("limit");
+
+      const where: Record<string, unknown> = {};
+      if (status) where.status = status;
+
+      const standups = await prisma.standupSession.findMany({
+        where,
+        orderBy: { sessionDate: "desc" },
+        take: limit ? parseInt(limit) : 10,
+        include: {
+          items: { orderBy: { createdAt: "asc" } },
+        },
+      });
+
+      console.log(JSON.stringify(standups, null, 2));
+      break;
+    }
+
+    // === PROGRESS LOG COMMANDS ===
+
+    case "log-progress": {
+      const sessionType = getFlag("sessionType");
+      const summary = getFlag("summary");
+      const decisions = getFlag("decisions");
+      const assetsCreated = getFlag("assetsCreated");
+      const loopsAdvanced = getFlag("loopsAdvanced");
+      const blockers = getFlag("blockers");
+      const nextSteps = getFlag("nextSteps");
+      const metadata = getFlag("metadata");
+
+      if (!sessionType || !summary) {
+        console.error("Required: --sessionType --summary");
+        process.exit(1);
+      }
+
+      let project = await prisma.project.findFirst({ where: { name: "Zavis" } });
+      if (!project) {
+        project = await prisma.project.create({ data: { name: "Zavis" } });
+      }
+
+      const log = await prisma.progressLog.create({
+        data: {
+          projectId: project.id,
+          sessionType,
+          summary,
+          decisions: decisions ?? null,
+          assetsCreated: assetsCreated ?? null,
+          loopsAdvanced: loopsAdvanced ?? null,
+          blockers: blockers ?? null,
+          nextSteps: nextSteps ?? null,
+          metadata: metadata ?? null,
+        },
+      });
+
+      console.log(JSON.stringify({ id: log.id, message: "Progress logged" }));
+      break;
+    }
+
+    case "list-progress": {
+      const sessionType = getFlag("sessionType");
+      const days = getFlag("days");
+      const limit = getFlag("limit");
+
+      const since = new Date();
+      since.setDate(since.getDate() - (days ? parseInt(days) : 7));
+
+      const where: Record<string, unknown> = {
+        sessionDate: { gte: since },
+      };
+      if (sessionType) where.sessionType = sessionType;
+
+      const logs = await prisma.progressLog.findMany({
+        where,
+        orderBy: { sessionDate: "desc" },
+        take: limit ? parseInt(limit) : 20,
+      });
+
+      console.log(JSON.stringify(logs, null, 2));
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
-      console.error("Available commands: seed-project, create-asset, add-version, add-brand-check, read-feedback, mark-feedback-actioned, create-campaign, create-ad-group, create-ad-creative, create-video-scene, update-scene-status, update-scene-files, list-scenes, create-calendar-event, list-calendar-events, update-calendar-event, create-loop, advance-loop, record-metric, record-optimization, apply-optimization, measure-optimization, create-research, update-north-star, loop-status, metrics-summary");
+      console.error("Available commands: seed-project, create-asset, add-version, add-brand-check, read-feedback, mark-feedback-actioned, create-campaign, create-ad-group, create-ad-creative, create-video-scene, update-scene-status, update-scene-files, list-scenes, create-calendar-event, list-calendar-events, update-calendar-event, create-loop, advance-loop, record-metric, record-optimization, apply-optimization, measure-optimization, create-research, update-north-star, loop-status, metrics-summary, create-research-brief, update-research-brief, list-research-briefs, create-standup, add-standup-item, respond-standup-item, complete-standup, list-standups, log-progress, list-progress");
       process.exit(1);
   }
 }

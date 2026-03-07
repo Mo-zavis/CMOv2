@@ -21,6 +21,10 @@ model Project {
   metricSnapshots       MetricSnapshot[]
   researchArtifacts     ResearchArtifact[]
   optimizationDecisions OptimizationDecision[]
+  researchBriefs        ResearchBrief[]
+  standupSessions       StandupSession[]
+  progressLogs          ProgressLog[]
+  eventOpportunities    EventOpportunity[]
   createdAt             DateTime               @default(now())
 }
 
@@ -237,6 +241,8 @@ model LoopExecution {
   cycleNumber  Int            @default(1)
   config       String?        // JSON: loop-specific settings (check intervals, thresholds)
   summary      String?        // JSON: latest cycle summary
+  parentLoopId String?        // for micro-cycles nested within a macro cycle
+  parentPhase  String?        // which phase of the parent loop spawned this micro-cycle
   phases       LoopPhaseLog[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
@@ -245,6 +251,7 @@ model LoopExecution {
   @@index([campaignId])
   @@index([loopType])
   @@index([status])
+  @@index([parentLoopId])
 }
 
 model LoopPhaseLog {
@@ -316,4 +323,117 @@ model ResearchArtifact {
   @@index([projectId])
   @@index([campaignId])
   @@index([artifactType])
+}
+
+// === RESEARCH & PLANNING LAYER ===
+
+model ResearchBrief {
+  id               String    @id @default(cuid())
+  projectId        String
+  project          Project   @relation(fields: [projectId], references: [id])
+  campaignId       String?
+  loopExecutionId  String?   // the loop this research is gating
+  briefType        String    // "market" | "competitor" | "audience" | "channel" | "content" | "performance" | "brand" | "industry"
+  question         String    // The research question to answer
+  context          String?   // JSON: why this research is needed, what decision it informs
+  status           String    @default("PENDING") // PENDING | IN_PROGRESS | COMPLETED | STALE
+  findings         String?   // JSON: structured research findings
+  confidence       Float?    // 0-1 confidence in findings
+  sources          String?   // JSON: array of sources used
+  expiresAt        DateTime? // when this research goes stale and needs refresh
+  linkedDecisionId String?   // OptimizationDecision this research informs
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([projectId])
+  @@index([campaignId])
+  @@index([loopExecutionId])
+  @@index([briefType])
+  @@index([status])
+}
+
+// === STANDUP / ALIGNMENT SYSTEM ===
+
+model StandupSession {
+  id          String        @id @default(cuid())
+  projectId   String
+  project     Project       @relation(fields: [projectId], references: [id])
+  sessionDate DateTime      @default(now())
+  status      String        @default("PENDING") // PENDING | ACTIVE | AWAITING_RESPONSE | COMPLETED
+  summary     String?       // AI-generated summary
+  items       StandupItem[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+  @@index([sessionDate])
+}
+
+model StandupItem {
+  id         String         @id @default(cuid())
+  standupId  String
+  standup    StandupSession @relation(fields: [standupId], references: [id])
+  category   String         // DONE | PLANNED | BLOCKED | PERMISSION | DEPENDENCY | INSIGHT | RESEARCH_NEEDED
+  content    String         // What the item is about
+  priority   String         @default("NORMAL") // LOW | NORMAL | HIGH | URGENT
+  context    String?        // JSON: linked asset IDs, campaign IDs, loop IDs
+  response   String?        // Human response to this item
+  resolved   Boolean        @default(false)
+  resolvedAt DateTime?
+  createdAt  DateTime       @default(now())
+
+  @@index([standupId])
+  @@index([category])
+}
+
+// === PROGRESS TRACKING ===
+
+model ProgressLog {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id])
+  sessionDate   DateTime @default(now())
+  sessionType   String   // "work" | "standup" | "research" | "optimization" | "review" | "planning"
+  summary       String   // What happened in this session
+  decisions     String?  // JSON: key decisions made and their rationale
+  assetsCreated String?  // JSON: array of asset IDs created/modified
+  loopsAdvanced String?  // JSON: array of loop IDs advanced
+  blockers      String?  // JSON: current blockers with severity
+  nextSteps     String?  // JSON: planned next actions with priority
+  metadata      String?  // JSON: session duration, tools used, APIs called
+  createdAt     DateTime @default(now())
+
+  @@index([projectId])
+  @@index([sessionDate])
+  @@index([sessionType])
+}
+
+// === EVENT STRATEGY ===
+
+model EventOpportunity {
+  id              String   @id @default(cuid())
+  projectId       String
+  project         Project  @relation(fields: [projectId], references: [id])
+  name            String   // Event name
+  eventType       String   // "conference" | "expo" | "meetup" | "webinar" | "workshop" | "awards" | "networking"
+  location        String?  // City/venue
+  region          String   @default("UAE") // "UAE" | "GCC" | "MENA" | "Global"
+  startDate       DateTime?
+  endDate         DateTime?
+  website         String?  // Event URL
+  relevanceScore  Float?   // 0-10, how relevant to Zavis target market
+  audienceOverlap String?  // JSON: who attends (dental, medical, healthtech, investors)
+  opportunities   String?  // JSON: speaking slots, sponsorship tiers, booth options, demo opportunities
+  strategy        String?  // Our plan for this event (attend, speak, sponsor, exhibit)
+  status          String   @default("IDENTIFIED") // IDENTIFIED | EVALUATING | COMMITTED | ATTENDED | SKIPPED
+  outcome         String?  // JSON: post-event results (leads, contacts, content created)
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([eventType])
+  @@index([status])
+  @@index([region])
 }

@@ -1,6 +1,6 @@
 # Zavis CMO - System Status & Capabilities
 
-**Last Updated:** March 6, 2026
+**Last Updated:** March 7, 2026
 
 AI-powered Chief Marketing Officer system for Zavis, a healthcare patient engagement platform. Two-layer architecture: Claude Code (runtime) generates assets, Next.js dashboard (feedback layer) displays them for human review.
 
@@ -8,6 +8,7 @@ AI-powered Chief Marketing Officer system for Zavis, a healthcare patient engage
 
 ## Table of Contents
 
+0. [Core Operating Principle](#0-core-operating-principle)
 1. [Capabilities](#1-capabilities)
 2. [Integrations & APIs](#2-integrations--apis)
 3. [MCP Servers](#3-mcp-servers)
@@ -22,6 +23,20 @@ AI-powered Chief Marketing Officer system for Zavis, a healthcare patient engage
 12. [What Is Working Today](#12-what-is-working-today)
 13. [What Needs Setup](#13-what-needs-setup)
 14. [What Is Planned](#14-what-is-planned)
+
+---
+
+## 0. Core Operating Principle
+
+**Marketing Power = (Total Range of Distribution x Weight of Content) ^ Value of Brand**
+
+Every CMO decision is evaluated against this formula.
+
+- **Range of Distribution**: Total touchpoints where Zavis appears. Owned (website, blog, social), paid (Google/Meta/LinkedIn Ads), earned (PR, press, podcasts), community (forums, founder accounts), events (conferences, expos, networking).
+- **Weight of Content**: Credibility and persuasive power. Doctor testimonials > case studies with metrics > founder thought leadership > expert interviews > generic product posts.
+- **Value of Brand**: The exponential multiplier. Consistent identity, messaging on three pillars, market positioning as AI-native patient engagement, trust signals. Compounds over time.
+
+**Event Strategy**: The CMO tracks UAE/GCC healthcare events (conferences, expos, healthtech meetups, government digitization initiatives) and recommends which to attend, speak at, or sponsor based on audience overlap with Zavis target market.
 
 ---
 
@@ -41,6 +56,11 @@ AI-powered Chief Marketing Officer system for Zavis, a healthcare patient engage
 | 10 | Calendar Management | WORKING | Content calendar with scheduled events across channels. |
 | 11 | Analytics & Reporting | WORKING (needs API credentials for live data) | North star metrics, channel performance aggregation, optimization decisions. |
 | 12 | Email Marketing | PLANNED | Campaign creation, segmentation, HTML templates, A/B testing via Plunk. |
+| 13 | Research Layer | WORKING | Mandatory research briefs before campaign decisions. Market, competitor, audience, channel, content, performance, and industry research with findings, confidence scores, and decision linking. |
+| 14 | Daily Standups | WORKING | Scheduled alignment sessions. Claude surfaces what was done, what is planned, blockers, permissions needed, and dependencies. Human reviews and responds. |
+| 15 | Progress Tracking | WORKING | Session-level progress logs capturing decisions, assets created, loops advanced, blockers, and next steps. |
+| 16 | Event Strategy | WORKING | Track UAE/GCC healthcare events (conferences, expos, meetups). Evaluate audience overlap, networking value, speaking/sponsorship opportunities. |
+| 17 | Macro/Micro Cycles | WORKING | Nested cyclic processes. Macro loops (campaign lifecycle) contain micro loops (creative iteration, bid optimization). Loops reference parent loops. |
 
 ---
 
@@ -364,6 +384,11 @@ Schema at `dashboard/prisma/schema.prisma`.
 | MetricSnapshot | Performance metrics | channel, metric, value, timestamp |
 | OptimizationDecision | AI optimization recommendations | type, rationale, impact, applied flag |
 | ResearchArtifact | Research phase outputs | artifactType, content JSON |
+| ResearchBrief | Research questions that must be answered before decisions | briefType, question, status, findings, confidence, sources, expiresAt, linkedDecisionId |
+| StandupSession | Scheduled alignment sessions | sessionDate, status (PENDING/ACTIVE/AWAITING_RESPONSE/COMPLETED), summary |
+| StandupItem | Individual items within a standup | category (DONE/PLANNED/BLOCKED/PERMISSION/DEPENDENCY/INSIGHT/RESEARCH_NEEDED), content, priority, response, resolved |
+| ProgressLog | Session-level progress tracking | sessionType, summary, decisions, assetsCreated, loopsAdvanced, blockers, nextSteps |
+| EventOpportunity | Industry events to track and attend | name, eventType, location, region, relevanceScore, audienceOverlap, opportunities, strategy, status, outcome |
 
 ---
 
@@ -465,6 +490,16 @@ npx tsx scripts/db-writer.ts <command> [flags]
 | update-north-star | Update campaign north star metrics |
 | loop-status | Get current loop status |
 | metrics-summary | Get metrics summary for a channel |
+| create-research-brief | Create a research question that must be answered (--briefType, --question) |
+| update-research-brief | Update research findings, status, confidence (--briefId, --status, --findings) |
+| list-research-briefs | List research briefs with filters (--campaignId, --status, --briefType) |
+| create-standup | Create a new standup session |
+| add-standup-item | Add item to standup (--standupId, --category, --content, --priority) |
+| respond-standup-item | Respond to a standup item (--itemId, --response) |
+| complete-standup | Complete a standup session (--standupId, --summary) |
+| list-standups | List standup sessions (--status, --limit) |
+| log-progress | Log session progress (--sessionType, --summary, --decisions, --blockers, --nextSteps) |
+| list-progress | List progress logs (--sessionType, --days, --limit) |
 
 ### Generation Scripts
 
@@ -527,6 +562,7 @@ All at `dashboard/src/app/`.
 | /ecosystem | Ecosystem | Interactive SVG architecture diagram |
 | /skills | Skill Map | All 41 skills organized by category |
 | /status | System Status | Capabilities, integrations, workflows, tech stack (React page) |
+| /standups | Standups | Daily alignment sessions timeline, item responses |
 
 ---
 
@@ -671,6 +707,12 @@ These work right now with no additional setup:
 11. **MCP: Figma** (design-to-code workflows)
 12. **MCP: Screenshot** (screen capture for debugging)
 13. **MCP: Chrome DevTools** (browser inspection)
+14. **Research briefs** (create, track, complete research before decisions)
+15. **Daily standups** (create sessions, add items by category, respond, complete)
+16. **Progress logging** (session-level tracking of work, decisions, blockers)
+17. **Event tracking** (identify, evaluate, and plan for industry events)
+18. **Campaign cyclic view** (6-tab process: Overview, Research, Assets, Distribution, Tracking, Optimize)
+19. **Macro/micro cycle nesting** (loops can reference parent loops for nested cycles)
 
 ---
 
